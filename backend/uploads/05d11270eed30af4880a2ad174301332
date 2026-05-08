@@ -1,0 +1,61 @@
+1. Cloud Computing Federation:
+A cloud federation is when two or more cloud providers or organizations connect their infrastructures so that they can share resources (like computing power, storage, or services) with each other.
+basically its like a mutual friendship pact between clouds — if one runs low on resources, it can borrow from another.
+
+Why it’s used:
+
+Handle peak loads without buying extra hardware.
+
+Enable geo-distributed services for global users.
+
+Improve redundancy and disaster recovery.
+
+Example:
+A university cloud joins a research institute’s cloud so researchers can use each other’s computing clusters when needed.
+
+2. Edge Location
+
+A small data center closer to end-users, used for content delivery and caching.
+
+Purpose:
+Reduce latency (delay) by serving requests from the nearest location rather than the main server.
+
+In AWS terms:
+Edge locations are part of Amazon CloudFront (CDN).
+
+Example:
+If you’re in Delhi and access a video hosted in the US, an AWS edge location in Mumbai can cache and serve it faster.
+
+3. Region
+
+A geographical area that contains multiple, isolated data centers (availability zones).
+
+Example:
+us-east-1 (N. Virginia), ap-south-1 (Mumbai).
+
+Key Points:
+
+Each region is completely independent.
+
+You choose a region based on latency, cost, and regulatory requirements.
+
+4. Availability Zone (AZ)
+
+A physically separate data center inside a region, with independent power, cooling, and networking.
+
+Why multiple AZs exist:
+
+To make applications fault-tolerant — if one AZ fails, another can take over.
+
+Example:
+ap-south-1a and ap-south-1b are two AZs in the Mumbai region.
+
+5. Hypervisor:
+A software, firmware, or hardware layer that allows multiple virtual machines (VMs) to run on a single physical machine by sharing its resources (CPU, RAM, storage, network).
+
+Main job:
+Virtualization — separating the hardware from the operating systems.
+
+Why Hypervisors Matter in Cloud Computing
+
+They let cloud providers (AWS, Azure, GCP) run thousands of virtual servers on fewer physical machines.
