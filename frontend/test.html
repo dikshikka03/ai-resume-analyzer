@@ -2,30 +2,131 @@
 <html>
 
 <head>
-  <title>Resume Upload Test</title>
+
+  <title>AI Resume Analyzer</title>
+
+  <style>
+
+    body {
+      font-family: Arial;
+      background: #f4f4f4;
+      padding: 40px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .section {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+
+  </style>
+
 </head>
 
 <body>
 
-  <h2>Upload Resume PDF</h2>
+  <div class="container">
 
-  <input type="file" id="resumeFile" />
+    <h1>AI Resume Analyzer</h1>
 
-  <button onclick="uploadResume()">
-    Upload
-  </button>
+    <input type="file" id="resumeFile">
 
-  <pre id="result"></pre>
+    <br><br>
+
+    <textarea
+      id="jobDescription"
+      rows="8"
+      placeholder="Paste Job Description Here"
+    ></textarea>
+
+    <br><br>
+
+    <button onclick="uploadResume()">
+      Upload Resume
+    </button>
+
+    <div class="section">
+      <h3>Skills</h3>
+      <p id="skills"></p>
+    </div>
+
+    <div class="section">
+      <h3>Resume Score</h3>
+      <p id="score"></p>
+    </div>
+
+    <div class="section">
+      <h3>ATS Match Score</h3>
+      <p id="ats"></p>
+    </div>
+
+    <div class="section">
+      <h3>Missing Skills</h3>
+      <p id="missing"></p>
+    </div>
+
+    <div class="section">
+      <h3>Suggested Roles</h3>
+      <p id="roles"></p>
+    </div>
+
+    <div class="section">
+      <h3>AI Feedback</h3>
+      <p id="feedback"></p>
+    </div>
+
+  </div>
 
   <script>
 
     async function uploadResume() {
 
-      const fileInput = document.getElementById("resumeFile");
+      const fileInput =
+        document.getElementById("resumeFile");
+
+      const jobDescription =
+        document.getElementById(
+          "jobDescription"
+        ).value;
 
       const formData = new FormData();
 
-      formData.append("resume", fileInput.files[0]);
+      formData.append(
+        "resume",
+        fileInput.files[0]
+      );
+
+      formData.append(
+        "jobDescription",
+        jobDescription
+      );
 
       const response = await fetch(
         "http://localhost:5000/upload",
@@ -37,8 +138,23 @@
 
       const data = await response.json();
 
-      document.getElementById("result").innerText =
-        JSON.stringify(data, null, 2);
+      document.getElementById("skills")
+        .innerText = data.skills;
+
+      document.getElementById("score")
+        .innerText = data.resumeScore;
+
+      document.getElementById("ats")
+        .innerText = data.atsScore + "%";
+
+      document.getElementById("missing")
+        .innerText = data.missingSkills;
+
+      document.getElementById("roles")
+        .innerText = data.suggestedRoles;
+
+      document.getElementById("feedback")
+        .innerText = data.feedback;
 
     }
 
