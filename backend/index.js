@@ -7,7 +7,9 @@ const pdf = require("pdf-parse");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 
 const skillsList = [
   "Java",
