@@ -50,7 +50,7 @@ function App() {
     try {
 
       const response = await fetch(
-        "http://localhost:5000/upload",
+        "http://ai-resume-analyzer-production-557e.up.railway.app/upload",
         {
           method: "POST",
           body: formData
