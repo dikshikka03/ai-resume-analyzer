@@ -1,3 +1,4 @@
+import jsPDF from "jspdf";
 import { useState } from "react";
 import "./App.css";
 
@@ -46,7 +47,62 @@ function App() {
       setLoading(false);
     }
   };
+const downloadPDF = () => {
 
+  if (!result) {
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+
+  doc.text("AI Resume Analysis Report", 20, 20);
+
+  doc.setFontSize(12);
+
+  doc.text(
+    `ATS Score: ${result.atsScore}%`,
+    20,
+    40
+  );
+
+  doc.text(
+    `Resume Score: ${result.resumeScore}`,
+    20,
+    55
+  );
+
+  doc.text(
+    `Skills: ${result.skills.join(", ")}`,
+    20,
+    75,
+    { maxWidth: 170 }
+  );
+
+  doc.text(
+    `Missing Skills: ${result.missingSkills.join(", ")}`,
+    20,
+    105,
+    { maxWidth: 170 }
+  );
+
+  doc.text(
+    `Suggested Roles: ${result.suggestedRoles.join(", ")}`,
+    20,
+    135,
+    { maxWidth: 170 }
+  );
+
+  doc.text(
+    `Feedback: ${result.feedback.join(", ")}`,
+    20,
+    165,
+    { maxWidth: 170 }
+  );
+
+  doc.save("resume-analysis.pdf");
+};
   return (
     <div className="min-h-screen bg-[#020617] text-white p-8">
 
@@ -76,7 +132,27 @@ function App() {
         >
           {loading ? "Uploading..." : "Upload Resume"}
         </button>
+{
+  result && (
 
+    <button
+      onClick={downloadPDF}
+      className="
+        bg-green-600
+        hover:bg-green-700
+        px-8
+        py-4
+        rounded-2xl
+        text-xl
+        font-semibold
+        ml-4
+      "
+    >
+      Download Report PDF
+    </button>
+
+  )
+}
         {result && (
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
 
