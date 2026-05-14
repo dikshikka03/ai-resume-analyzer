@@ -250,29 +250,51 @@ function App() {
 
         </button>
 
-        {
+       {
 
-          result && (
+  result && (
 
-            <button
-              onClick={downloadPDF}
-              className="
-                bg-green-600
-                hover:bg-green-700
-                px-8
-                py-4
-                rounded-2xl
-                text-xl
-                font-semibold
-                ml-4
-              "
-            >
-              Download Report PDF
-            </button>
+    <>
 
-          )
+      <button
+        onClick={downloadPDF}
+        className="
+          bg-green-600
+          hover:bg-green-700
+          px-8
+          py-4
+          rounded-2xl
+          text-xl
+          font-semibold
+          ml-4
+        "
+      >
+        Download Report PDF
+      </button>
 
-        }
+      <button
+        className="
+          bg-purple-600
+          hover:bg-purple-700
+          px-8
+          py-4
+          rounded-2xl
+          text-xl
+          font-semibold
+          ml-4
+        "
+      >
+        Generate ATS Resume
+      </button>
+
+    </>
+
+  )
+
+}
+
+
+        
 
         {
 
