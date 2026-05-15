@@ -1,194 +1,50 @@
 require("dotenv").config();
 
 const express = require("express");
-const multer = require("multer");
 const cors = require("cors");
-const pdf = require("pdf-parse");
+const multer = require("multer");
+const pdfParse = require("pdf-parse");
+const fs = require("fs");
 
 const app = express();
 
-app.use(cors({
-  origin: "*"
-  methods: ["GET", "POST"],
-}));
+const PORT =
+  process.env.PORT || 5000;
 
-const skillsList = [
-  "Java",
-  "Python",
-  "C++",
-  "SQL",
-  "React",
-  "Node.js",
-  "MongoDB",
-  "Machine Learning",
-  "HTML",
-  "CSS",
-  "JavaScript",
-  "Git",
-  "Pandas",
-  "NumPy",
-  "Scikit-learn"
-];
+// CORS
 
-const requiredSkills = [
-  "Java",
-  "Python",
-  "React",
-  "Node.js",
-  "MongoDB",
-  "SQL",
-  "Git"
-];
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+  })
+);
 
-function extractSkills(text) {
+// JSON LIMIT
 
-  let foundSkills = [];
+app.use(
+  express.json({
+    limit: "10mb",
+  })
+);
 
-  skillsList.forEach(skill => {
-
-    if (
-      text.toLowerCase().includes(
-        skill.toLowerCase()
-      )
-    ) {
-      foundSkills.push(skill);
-    }
-
-  });
-
-  return foundSkills;
-}
-
-function calculateScore(skills) {
-
-  let score = skills.length * 10;
-
-  if (score > 100) {
-    score = 100;
-  }
-
-  return score;
-}
-
-function findMissingSkills(foundSkills) {
-
-  let missing = [];
-
-  requiredSkills.forEach(skill => {
-
-    if (!foundSkills.includes(skill)) {
-      missing.push(skill);
-    }
-
-  });
-
-  return missing;
-}
-
-function suggestJobRoles(skills) {
-
-  let roles = [];
-
-  if (
-    skills.includes("Python") &&
-    skills.includes("Machine Learning")
-  ) {
-    roles.push("AI/ML Engineer");
-  }
-
-  if (
-    skills.includes("JavaScript") &&
-    skills.includes("React")
-  ) {
-    roles.push("Frontend Developer");
-  }
-
-  if (
-    skills.includes("Node.js") &&
-    skills.includes("MongoDB")
-  ) {
-    roles.push("Backend Developer");
-  }
-
-  if (
-    skills.includes("SQL") &&
-    skills.includes("Pandas")
-  ) {
-    roles.push("Data Analyst");
-  }
-
-  return roles;
-}
-
-function generateFeedback(
-  score,
-  missingSkills
-) {
-
-  let feedback = [];
-
-  if (score >= 80) {
-    feedback.push(
-      "Strong resume overall."
-    );
-  }
-  else {
-    feedback.push(
-      "Resume needs improvement."
-    );
-  }
-
-  if (missingSkills.length > 0) {
-
-    feedback.push(
-      "Consider learning: " +
-      missingSkills.join(", ")
-    );
-
-  }
-
-  return feedback;
-}
-
-function calculateATSScore(
-  skills,
-  jobDescription
-) {
-
-  let matchCount = 0;
-
-  skills.forEach(skill => {
-
-    if (
-      jobDescription
-        .toLowerCase()
-        .includes(skill.toLowerCase())
-    ) {
-      matchCount++;
-    }
-
-  });
-
-  if (skills.length === 0) {
-    return 0;
-  }
-
-  return Math.round(
-    (matchCount / skills.length) * 100
-  );
-}
+// MULTER STORAGE
 
 const upload = multer({
-  storage: multer.memoryStorage()
+  dest: "uploads/",
 });
+
+// HOME ROUTE
 
 app.get("/", (req, res) => {
 
   res.send(
-    "Backend running successfully"
+    "AI Resume Analyzer Backend Running"
   );
 
 });
+
+// UPLOAD ROUTE
 
 app.post(
   "/upload",
@@ -198,59 +54,191 @@ app.post(
 
     try {
 
+      // CHECK FILE
+
       if (!req.file) {
 
         return res.status(400).json({
-          success: false,
-          message: "No file uploaded"
+          error:
+            "No resume uploaded",
         });
 
       }
 
-      const data =
-        await pdf(req.file.buffer);
+      // READ PDF
 
-      const skills =
-        extractSkills(data.text);
+      const dataBuffer =
+        fs.readFileSync(
+          req.file.path
+        );
 
-      const score =
-        calculateScore(skills);
+      const pdfData =
+        await pdfParse(
+          dataBuffer
+        );
+
+      const resumeText =
+        pdfData.text.toLowerCase();
+
+      // JOB DESCRIPTION
+
+      const jobDescription =
+        (
+          req.body.jobDescription || ""
+        ).toLowerCase();
+
+      // SKILLS LIST
+
+      const skillsList = [
+
+        "java",
+        "python",
+        "c++",
+        "sql",
+        "mongodb",
+        "machine learning",
+        "html",
+        "css",
+        "javascript",
+        "git",
+        "react",
+        "node.js",
+        "express",
+        "pandas",
+        "numpy",
+        "scikit-learn"
+
+      ];
+
+      // DETECTED SKILLS
+
+      const detectedSkills =
+        skillsList.filter(
+          (skill) =>
+            resumeText.includes(
+              skill
+            )
+        );
+
+      // MISSING SKILLS
 
       const missingSkills =
-        findMissingSkills(skills);
-
-      const suggestedRoles =
-        suggestJobRoles(skills);
-
-      const feedback =
-        generateFeedback(
-          score,
-          missingSkills
+        skillsList.filter(
+          (skill) =>
+            jobDescription.includes(
+              skill
+            ) &&
+            !resumeText.includes(
+              skill
+            )
         );
+
+      // ATS SCORE
 
       const atsScore =
-        calculateATSScore(
-          skills,
-          req.body.jobDescription || ""
+        Math.min(
+          100,
+          detectedSkills.length * 8
         );
+
+      // SUGGESTED ROLES
+
+      let suggestedRoles = [];
+
+      if (
+        detectedSkills.includes(
+          "machine learning"
+        )
+      ) {
+
+        suggestedRoles.push(
+          "AI/ML Engineer"
+        );
+
+      }
+
+      if (
+        detectedSkills.includes(
+          "sql"
+        )
+      ) {
+
+        suggestedRoles.push(
+          "Data Analyst"
+        );
+
+      }
+
+      if (
+        detectedSkills.includes(
+          "react"
+        )
+      ) {
+
+        suggestedRoles.push(
+          "Frontend Developer"
+        );
+
+      }
+
+      if (
+        detectedSkills.includes(
+          "node.js"
+        )
+      ) {
+
+        suggestedRoles.push(
+          "Backend Developer"
+        );
+
+      }
+
+      if (
+        suggestedRoles.length === 0
+      ) {
+
+        suggestedRoles.push(
+          "Software Developer"
+        );
+
+      }
+
+      // FEEDBACK
+
+      let feedback =
+        "Good resume overall.";
+
+      if (
+        missingSkills.length > 0
+      ) {
+
+        feedback =
+          `Consider learning: ${missingSkills.join(
+            ", "
+          )}`;
+
+      }
+
+      // DELETE TEMP FILE
+
+      fs.unlinkSync(
+        req.file.path
+      );
+
+      // RESPONSE
 
       res.json({
 
-        success: true,
+        atsScore,
 
-        extractedText: data.text,
+        skills:
+          detectedSkills,
 
-        skills: skills,
+        missingSkills,
 
-        resumeScore: score,
+        suggestedRoles,
 
-        atsScore: atsScore,
-
-        missingSkills: missingSkills,
-
-        suggestedRoles: suggestedRoles,
-
-        feedback: feedback
+        feedback,
 
       });
 
@@ -261,9 +249,8 @@ app.post(
 
       res.status(500).json({
 
-        success: false,
-
-        message: error.message
+        error:
+          "Something went wrong",
 
       });
 
@@ -272,10 +259,12 @@ app.post(
   }
 );
 
-app.listen(5000, () => {
+// START SERVER
+
+app.listen(PORT, () => {
 
   console.log(
-    "Server started on port 5000"
+    `Server running on port ${PORT}`
   );
 
 });
