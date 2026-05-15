@@ -92,7 +92,57 @@ function App() {
     if (!result) {
       return;
     }
+const generateATSResume = () => {
 
+  const doc = new jsPDF();
+
+  doc.setFontSize(22);
+
+  doc.text(
+    "ATS Friendly Resume",
+    20,
+    20
+  );
+
+  doc.setFontSize(14);
+
+  doc.text(
+    "Name: Dikshika Sachdeva",
+    20,
+    40
+  );
+
+  doc.text(
+    "Skills:",
+    20,
+    60
+  );
+
+  doc.text(
+    result.skills.join(", "),
+    20,
+    75,
+    { maxWidth: 170 }
+  );
+
+  doc.text(
+    "Suggested Roles:",
+    20,
+    100
+  );
+
+  doc.text(
+    result.suggestedRoles.join(", "),
+    20,
+    115,
+    { maxWidth: 170 }
+  );
+
+  doc.save(
+    "ATS-Resume.pdf"
+  );
+
+};
     const doc = new jsPDF();
 
     doc.setFontSize(18);
@@ -284,8 +334,9 @@ function App() {
             result && (
 
               <div className="mt-6">
-
-                <button
+                
+<button
+  onClick={generateATSResume}
                   className="
                     bg-purple-600
                     hover:bg-purple-700
