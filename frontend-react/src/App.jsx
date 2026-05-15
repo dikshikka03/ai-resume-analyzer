@@ -166,66 +166,162 @@ function App() {
     );
 
   };
+const generateATSResume = () => {
 
-  const generateATSResume = () => {
+  if (!result) {
+    return;
+  }
 
-    if (!result) {
-      return;
-    }
+  const doc = new jsPDF();
 
-    const doc = new jsPDF();
+  // TITLE
 
-    doc.setFontSize(22);
+  doc.setFontSize(24);
 
-    doc.text(
-      "ATS Friendly Resume",
-      20,
-      20
-    );
+  doc.setTextColor(40, 40, 40);
 
-    doc.setFontSize(14);
+  doc.text(
+    "Dikshika Sachdeva",
+    20,
+    25
+  );
 
-    doc.text(
-      "Name: Dikshika Sachdeva",
-      20,
-      40
-    );
+  // CONTACT
 
-    doc.text(
-      "Skills:",
-      20,
-      60
-    );
+  doc.setFontSize(11);
 
-    doc.text(
-      Array.isArray(result.skills)
-        ? result.skills.join(", ")
-        : "No skills found",
-      20,
-      75,
-      { maxWidth: 170 }
-    );
+  doc.text(
+    "Email: dikshika@email.com",
+    20,
+    35
+  );
 
-    doc.text(
-      "Suggested Roles:",
-      20,
-      110
-    );
+  doc.text(
+    "LinkedIn: linkedin.com/in/dikshika",
+    20,
+    42
+  );
 
-    doc.text(
-      Array.isArray(result.suggestedRoles)
-        ? result.suggestedRoles.join(", ")
-        : "No roles found",
-      20,
-      125,
-      { maxWidth: 170 }
-    );
+  doc.text(
+    "GitHub: github.com/dikshikka03",
+    20,
+    49
+  );
 
-    doc.save(
-      "ATS-Resume.pdf"
-    );
+  // LINE
 
-  };
+  doc.line(20, 55, 190, 55);
+
+  // SUMMARY
+
+  doc.setFontSize(16);
+
+  doc.text(
+    "Professional Summary",
+    20,
+    70
+  );
+
+  doc.setFontSize(12);
+
+  doc.text(
+    "Aspiring AI/ML Engineer with strong knowledge of Python, SQL, Machine Learning, and Full Stack Development. Passionate about building scalable AI-powered applications and solving real-world problems.",
+    20,
+    80,
+    { maxWidth: 170 }
+  );
+
+  // SKILLS
+
+  doc.setFontSize(16);
+
+  doc.text(
+    "Technical Skills",
+    20,
+    110
+  );
+
+  doc.setFontSize(12);
+
+  doc.text(
+    Array.isArray(result.skills)
+      ? result.skills.join(", ")
+      : "No skills found",
+    20,
+    120,
+    { maxWidth: 170 }
+  );
+
+  // PROJECTS
+
+  doc.setFontSize(16);
+
+  doc.text(
+    "Projects",
+    20,
+    145
+  );
+
+  doc.setFontSize(12);
+
+  doc.text(
+    "• AI Resume Analyzer - Built an AI-powered resume screening platform using React, Node.js, Express, and Gemini AI.",
+    20,
+    155,
+    { maxWidth: 170 }
+  );
+
+  doc.text(
+    "• ShopIQ - Smart e-commerce platform with AI chatbot and dynamic pricing features.",
+    20,
+    170,
+    { maxWidth: 170 }
+  );
+
+  // ATS SCORE
+
+  doc.setFontSize(16);
+
+  doc.text(
+    "ATS Match Score",
+    20,
+    195
+  );
+
+  doc.setFontSize(14);
+
+  doc.text(
+    `${result.atsScore}% Match`,
+    20,
+    205
+  );
+
+  // SUGGESTED ROLES
+
+  doc.setFontSize(16);
+
+  doc.text(
+    "Suggested Roles",
+    20,
+    225
+  );
+
+  doc.setFontSize(12);
+
+  doc.text(
+    Array.isArray(result.suggestedRoles)
+      ? result.suggestedRoles.join(", ")
+      : "No roles found",
+    20,
+    235,
+    { maxWidth: 170 }
+  );
+
+  doc.save(
+    "ATS-Friendly-Resume.pdf"
+  );
+
+};
 
   const pieData = [
 
