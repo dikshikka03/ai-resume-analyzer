@@ -229,7 +229,7 @@ function App() {
 
         <div className="flex flex-col gap-6 mt-10">
 
-          <div className="flex flex-wrap gap-4 mt-8">
+          <div className="flex flex-wrap gap-5 mt-10">
 
             <button
               onClick={uploadResume}
@@ -239,7 +239,7 @@ function App() {
                 px-6
                 py-3
                 rounded-2xl
-                text-1g
+                text-3g
                 font-semibold
               "
             >
@@ -264,7 +264,7 @@ function App() {
                     px-6
                     py-3
                     rounded-2xl
-                    text-1g
+                    text-3g
                     font-semibold
                   "
                 >
@@ -281,7 +281,7 @@ function App() {
 
             result && (
 
-              <div className="mt-4">
+              <div className="mt-6">
 
                 <button
                   className="
@@ -290,7 +290,7 @@ function App() {
                     px-6
                     py-3
                     rounded-2xl
-                    text-1g
+                    text-3g
                     font-semibold
                   "
                 >
