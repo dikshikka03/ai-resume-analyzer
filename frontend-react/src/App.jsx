@@ -395,6 +395,10 @@ function App() {
                   Skills Analytics
                 </h2>
 
+                <p className="text-gray-400 mb-6">
+  AI-estimated proficiency level for detected skills
+</p>
+
                 <div
                   style={{
                     width: "100%",
