@@ -17,6 +17,8 @@ import "./App.css";
 
 function App() {
 
+  // BASIC STATES
+
   const [file, setFile] = useState(null);
 
   const [jobDescription, setJobDescription] =
@@ -25,6 +27,9 @@ function App() {
   const [result, setResult] = useState(null);
 
   const [loading, setLoading] = useState(false);
+
+  const [showForm, setShowForm] =
+    useState(false);
 
   // USER DETAILS
 
@@ -39,6 +44,27 @@ function App() {
     useState("");
 
   const [summary, setSummary] =
+    useState("");
+
+  const [college, setCollege] =
+    useState("");
+
+  const [degree, setDegree] =
+    useState("");
+
+  const [gpa, setGpa] =
+    useState("");
+
+  const [languages, setLanguages] =
+    useState("");
+
+  const [projects, setProjects] =
+    useState("");
+
+  const [certifications, setCertifications] =
+    useState("");
+
+  const [experience, setExperience] =
     useState("");
 
   // UPLOAD RESUME
@@ -104,13 +130,11 @@ function App() {
 
   };
 
-  // DOWNLOAD REPORT PDF
+  // REPORT PDF
 
   const downloadPDF = () => {
 
-    if (!result) {
-      return;
-    }
+    if (!result) return;
 
     const doc = new jsPDF();
 
@@ -169,17 +193,15 @@ function App() {
 
   };
 
-  // GENERATE ATS RESUME
+  // ATS RESUME
 
   const generateATSResume = () => {
 
-    if (!result) {
-      return;
-    }
+    if (!result) return;
 
     const doc = new jsPDF();
 
-    // NAME
+    // HEADER
 
     doc.setFontSize(24);
 
@@ -188,8 +210,6 @@ function App() {
       20,
       20
     );
-
-    // CONTACT
 
     doc.setFontSize(11);
 
@@ -211,8 +231,6 @@ function App() {
       49
     );
 
-    // LINE
-
     doc.line(20, 55, 190, 55);
 
     // SUMMARY
@@ -228,8 +246,7 @@ function App() {
     doc.setFontSize(12);
 
     doc.text(
-      summary ||
-      "Passionate software developer with strong technical skills.",
+      summary,
       20,
       80,
       { maxWidth: 170 }
@@ -256,6 +273,107 @@ function App() {
       { maxWidth: 170 }
     );
 
+    // EDUCATION
+
+    doc.setFontSize(16);
+
+    doc.text(
+      "Education",
+      20,
+      145
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      `${degree} - ${college}`,
+      20,
+      155
+    );
+
+    doc.text(
+      `GPA/CGPA: ${gpa}`,
+      20,
+      163
+    );
+
+    // LANGUAGES
+
+    doc.setFontSize(16);
+
+    doc.text(
+      "Languages",
+      20,
+      185
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      languages,
+      20,
+      195
+    );
+
+    // PROJECTS
+
+    doc.setFontSize(16);
+
+    doc.text(
+      "Projects",
+      20,
+      220
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      projects,
+      20,
+      230,
+      { maxWidth: 170 }
+    );
+
+    // CERTIFICATIONS
+
+    doc.addPage();
+
+    doc.setFontSize(16);
+
+    doc.text(
+      "Certifications",
+      20,
+      20
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      certifications,
+      20,
+      30,
+      { maxWidth: 170 }
+    );
+
+    // EXPERIENCE
+
+    doc.setFontSize(16);
+
+    doc.text(
+      "Experience",
+      20,
+      70
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      experience,
+      20,
+      80,
+      { maxWidth: 170 }
+    );
+
     // ATS SCORE
 
     doc.setFontSize(16);
@@ -263,7 +381,7 @@ function App() {
     doc.text(
       "ATS Match Score",
       20,
-      150
+      130
     );
 
     doc.setFontSize(14);
@@ -271,7 +389,7 @@ function App() {
     doc.text(
       `${result.atsScore}% Match`,
       20,
-      160
+      140
     );
 
     // SUGGESTED ROLES
@@ -281,7 +399,7 @@ function App() {
     doc.text(
       "Suggested Roles",
       20,
-      185
+      170
     );
 
     doc.setFontSize(12);
@@ -291,7 +409,7 @@ function App() {
         ? result.suggestedRoles.join(", ")
         : "No roles found",
       20,
-      195,
+      180,
       { maxWidth: 170 }
     );
 
@@ -299,9 +417,11 @@ function App() {
       "ATS-Friendly-Resume.pdf"
     );
 
+    setShowForm(false);
+
   };
 
-  // CHART DATA
+  // CHARTS
 
   const pieData = [
 
@@ -346,69 +466,7 @@ function App() {
 
       <div className="max-w-5xl mx-auto bg-[#0f172a] p-10 rounded-3xl shadow-lg">
 
-        {/* USER DETAILS */}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) =>
-              setName(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#1e293b]"
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#1e293b]"
-          />
-
-          <input
-            type="text"
-            placeholder="LinkedIn URL"
-            value={linkedin}
-            onChange={(e) =>
-              setLinkedin(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#1e293b]"
-          />
-
-          <input
-            type="text"
-            placeholder="GitHub URL"
-            value={github}
-            onChange={(e) =>
-              setGithub(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#1e293b]"
-          />
-
-        </div>
-
-        <textarea
-          placeholder="Professional Summary"
-          value={summary}
-          onChange={(e) =>
-            setSummary(e.target.value)
-          }
-          className="
-            w-full
-            h-32
-            p-4
-            rounded-2xl
-            bg-[#1e293b]
-            mb-6
-          "
-        />
-
-        {/* RESUME */}
+        {/* FILE */}
 
         <input
           type="file"
@@ -420,6 +478,8 @@ function App() {
           }
           className="mb-6"
         />
+
+        {/* JD */}
 
         <textarea
           placeholder="Paste Job Description"
@@ -457,8 +517,6 @@ function App() {
               rounded-2xl
               text-base
               font-semibold
-              transition-all
-              duration-300
             "
           >
 
@@ -498,7 +556,9 @@ function App() {
             result && (
 
               <button
-                onClick={generateATSResume}
+                onClick={() =>
+                  setShowForm(true)
+                }
                 className="
                   bg-purple-600
                   hover:bg-purple-700
@@ -518,7 +578,203 @@ function App() {
 
         </div>
 
-        {/* ATS ANALYTICS */}
+        {/* MODAL */}
+
+        {
+
+          showForm && (
+
+            <div
+              className="
+                fixed
+                inset-0
+                bg-black/70
+                flex
+                items-center
+                justify-center
+                z-50
+                overflow-y-auto
+                p-4
+              "
+            >
+
+              <div
+                className="
+                  bg-[#0f172a]
+                  p-8
+                  rounded-3xl
+                  w-full
+                  max-w-3xl
+                "
+              >
+
+                <h2 className="text-3xl font-bold mb-6">
+                  ATS Resume Details
+                </h2>
+
+                <div className="grid grid-cols-1 gap-4">
+
+                  <input
+                    type="text"
+                    placeholder="Full Name"
+                    value={name}
+                    onChange={(e) =>
+                      setName(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b]"
+                  />
+
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) =>
+                      setEmail(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b]"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="LinkedIn URL"
+                    value={linkedin}
+                    onChange={(e) =>
+                      setLinkedin(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b]"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="GitHub URL"
+                    value={github}
+                    onChange={(e) =>
+                      setGithub(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b]"
+                  />
+
+                  <textarea
+                    placeholder="Professional Summary"
+                    value={summary}
+                    onChange={(e) =>
+                      setSummary(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b] h-28"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="College Name"
+                    value={college}
+                    onChange={(e) =>
+                      setCollege(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b]"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Degree"
+                    value={degree}
+                    onChange={(e) =>
+                      setDegree(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b]"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="GPA / CGPA"
+                    value={gpa}
+                    onChange={(e) =>
+                      setGpa(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b]"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Languages Known"
+                    value={languages}
+                    onChange={(e) =>
+                      setLanguages(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b]"
+                  />
+
+                  <textarea
+                    placeholder="Projects"
+                    value={projects}
+                    onChange={(e) =>
+                      setProjects(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b] h-28"
+                  />
+
+                  <textarea
+                    placeholder="Certifications"
+                    value={certifications}
+                    onChange={(e) =>
+                      setCertifications(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b] h-24"
+                  />
+
+                  <textarea
+                    placeholder="Experience"
+                    value={experience}
+                    onChange={(e) =>
+                      setExperience(e.target.value)
+                    }
+                    className="p-4 rounded-xl bg-[#1e293b] h-24"
+                  />
+
+                </div>
+
+                <div className="flex gap-4 mt-6">
+
+                  <button
+                    onClick={generateATSResume}
+                    className="
+                      bg-purple-600
+                      hover:bg-purple-700
+                      px-6
+                      py-3
+                      rounded-2xl
+                      font-semibold
+                    "
+                  >
+                    Generate Resume
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      setShowForm(false)
+                    }
+                    className="
+                      bg-gray-600
+                      hover:bg-gray-700
+                      px-6
+                      py-3
+                      rounded-2xl
+                      font-semibold
+                    "
+                  >
+                    Cancel
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          )
+
+        }
+
+        {/* ANALYTICS */}
 
         {
 
@@ -531,10 +787,6 @@ function App() {
                 <h2 className="text-3xl font-bold mb-2">
                   ATS Analytics
                 </h2>
-
-                <p className="text-gray-400 mb-6">
-                  Resume compatibility with job description
-                </p>
 
                 <div className="flex justify-center">
 
@@ -589,17 +841,13 @@ function App() {
 
               </div>
 
-              {/* SKILLS ANALYTICS */}
+              {/* SKILL GRAPH */}
 
               <div className="bg-[#0f172a] p-6 rounded-3xl mt-10">
 
-                <h2 className="text-3xl font-bold mb-2">
+                <h2 className="text-3xl font-bold mb-6">
                   Skills Analytics
                 </h2>
-
-                <p className="text-gray-400 mb-6">
-                  AI-estimated proficiency level
-                </p>
 
                 <div
                   style={{
