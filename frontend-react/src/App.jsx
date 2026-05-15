@@ -67,8 +67,6 @@ function App() {
       const data =
         await response.json();
 
-      console.log(data);
-
       setResult(data);
 
     }
@@ -229,72 +227,83 @@ function App() {
           "
         />
 
-        <button
-          onClick={uploadResume}
-          className="
-            bg-blue-600
-            hover:bg-blue-700
-            px-8
-            py-4
-            rounded-2xl
-            text-xl
-            font-semibold
-          "
-        >
+        <div className="flex flex-col gap-6 mt-10">
+
+          <div className="flex flex-wrap gap-4 mt-8">
+
+            <button
+              onClick={uploadResume}
+              className="
+                bg-blue-600
+                hover:bg-blue-700
+                px-6
+                py-3
+                rounded-2xl
+                text-1g
+                font-semibold
+              "
+            >
+
+              {
+                loading
+                  ? "Uploading..."
+                  : "Upload Resume"
+              }
+
+            </button>
+
+            {
+
+              result && (
+
+                <button
+                  onClick={downloadPDF}
+                  className="
+                    bg-green-600
+                    hover:bg-green-700
+                    px-6
+                    py-3
+                    rounded-2xl
+                    text-1g
+                    font-semibold
+                  "
+                >
+                  Download Report PDF
+                </button>
+
+              )
+
+            }
+
+          </div>
 
           {
-            loading
-              ? "Uploading..."
-              : "Upload Resume"
+
+            result && (
+
+              <div className="mt-4">
+
+                <button
+                  className="
+                    bg-purple-600
+                    hover:bg-purple-700
+                    px-6
+                    py-3
+                    rounded-2xl
+                    text-1g
+                    font-semibold
+                  "
+                >
+                  Generate ATS Resume
+                </button>
+
+              </div>
+
+            )
+
           }
 
-        </button>
-
-       {
-
-  result && (
-
-    <>
-
-      <button
-        onClick={downloadPDF}
-        className="
-          bg-green-600
-          hover:bg-green-700
-          px-8
-          py-4
-          rounded-2xl
-          text-xl
-          font-semibold
-          ml-4
-        "
-      >
-        Download Report PDF
-      </button>
-
-      <button
-        className="
-          bg-purple-600
-          hover:bg-purple-700
-          px-8
-          py-4
-          rounded-2xl
-          text-xl
-          font-semibold
-          ml-4
-        "
-      >
-        Generate ATS Resume
-      </button>
-
-    </>
-
-  )
-
-}
-
-
-        
+        </div>
 
         {
 
@@ -302,51 +311,78 @@ function App() {
 
             <>
 
-              <div className="bg-[#0f172a] p-6 rounded-3xl mt-10">
+              <div className="bg-[#0f172a] p-8 rounded-3xl mt-10 text-center">
 
-                <h2 className="text-3xl font-bold mb-4">
+                <h2 className="text-3xl font-bold mb-2">
                   ATS Analytics
                 </h2>
 
-                <PieChart
-                  width={300}
-                  height={300}
-                >
+                <p className="text-gray-400 mb-6">
+                  Resume compatibility with job description
+                </p>
 
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={70}
-                    outerRadius={100}
-                    dataKey="value"
+                <div className="flex justify-center">
+
+                  <PieChart
+                    width={350}
+                    height={350}
                   >
 
-                    {
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={90}
+                      outerRadius={120}
+                      dataKey="value"
+                    >
 
-                      pieData.map(
-                        (
-                          entry,
-                          index
-                        ) => (
+                      {
 
-                          <Cell
-                            key={index}
-                            fill={
-                              COLORS[index]
-                            }
-                          />
+                        pieData.map(
+                          (entry, index) => (
 
+                            <Cell
+                              key={index}
+                              fill={COLORS[index]}
+                            />
+
+                          )
                         )
-                      )
 
-                    }
+                      }
 
-                  </Pie>
+                    </Pie>
 
-                  <Tooltip />
+                    <Tooltip />
 
-                </PieChart>
+                    <text
+                      x="50%"
+                      y="50%"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fill="white"
+                      fontSize="28"
+                      fontWeight="bold"
+                    >
+                      {result.atsScore}%
+                    </text>
+
+                  </PieChart>
+
+                </div>
+
+                <div className="mt-4 text-lg text-gray-300">
+
+                  {
+                    result.atsScore >= 75
+                    ? "Excellent ATS Match"
+                    : result.atsScore >= 50
+                    ? "Good ATS Match"
+                    : "Needs Improvement"
+                  }
+
+                </div>
 
               </div>
 
@@ -411,20 +447,20 @@ function App() {
 
                   <div className="w-full bg-gray-700 rounded-full h-4 mt-4">
 
-  <div
-    className="
-      bg-blue-500
-      h-4
-      rounded-full
-      transition-all
-      duration-500
-    "
-    style={{
-      width: `${result.atsScore}%`
-    }}
-  ></div>
+                    <div
+                      className="
+                        bg-blue-500
+                        h-4
+                        rounded-full
+                        transition-all
+                        duration-500
+                      "
+                      style={{
+                        width: `${result.atsScore}%`
+                      }}
+                    ></div>
 
-</div>
+                  </div>
 
                 </div>
 
