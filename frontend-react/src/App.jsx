@@ -26,6 +26,23 @@ function App() {
 
   const [loading, setLoading] = useState(false);
 
+  // USER DETAILS
+
+  const [name, setName] = useState("");
+
+  const [email, setEmail] = useState("");
+
+  const [linkedin, setLinkedin] =
+    useState("");
+
+  const [github, setGithub] =
+    useState("");
+
+  const [summary, setSummary] =
+    useState("");
+
+  // UPLOAD RESUME
+
   const uploadResume = async () => {
 
     try {
@@ -87,6 +104,8 @@ function App() {
 
   };
 
+  // DOWNLOAD REPORT PDF
+
   const downloadPDF = () => {
 
     if (!result) {
@@ -95,7 +114,7 @@ function App() {
 
     const doc = new jsPDF();
 
-    doc.setFontSize(18);
+    doc.setFontSize(20);
 
     doc.text(
       "AI Resume Analysis Report",
@@ -112,19 +131,13 @@ function App() {
     );
 
     doc.text(
-      `Resume Score: ${result.resumeScore}`,
-      20,
-      55
-    );
-
-    doc.text(
       `Skills: ${
         Array.isArray(result.skills)
           ? result.skills.join(", ")
           : "No skills found"
       }`,
       20,
-      75,
+      60,
       { maxWidth: 170 }
     );
 
@@ -135,7 +148,7 @@ function App() {
           : "No missing skills"
       }`,
       20,
-      105,
+      90,
       { maxWidth: 170 }
     );
 
@@ -146,18 +159,7 @@ function App() {
           : "No roles found"
       }`,
       20,
-      135,
-      { maxWidth: 170 }
-    );
-
-    doc.text(
-      `Feedback: ${
-        Array.isArray(result.feedback)
-          ? result.feedback.join(", ")
-          : "No feedback"
-      }`,
-      20,
-      165,
+      120,
       { maxWidth: 170 }
     );
 
@@ -166,162 +168,140 @@ function App() {
     );
 
   };
-const generateATSResume = () => {
 
-  if (!result) {
-    return;
-  }
+  // GENERATE ATS RESUME
 
-  const doc = new jsPDF();
+  const generateATSResume = () => {
 
-  // TITLE
+    if (!result) {
+      return;
+    }
 
-  doc.setFontSize(24);
+    const doc = new jsPDF();
 
-  doc.setTextColor(40, 40, 40);
+    // NAME
 
-  doc.text(
-    "Dikshika Sachdeva",
-    20,
-    25
-  );
+    doc.setFontSize(24);
 
-  // CONTACT
+    doc.text(
+      name || "Your Name",
+      20,
+      20
+    );
 
-  doc.setFontSize(11);
+    // CONTACT
 
-  doc.text(
-    "Email: dikshika@email.com",
-    20,
-    35
-  );
+    doc.setFontSize(11);
 
-  doc.text(
-    "LinkedIn: linkedin.com/in/dikshika",
-    20,
-    42
-  );
+    doc.text(
+      `Email: ${email}`,
+      20,
+      35
+    );
 
-  doc.text(
-    "GitHub: github.com/dikshikka03",
-    20,
-    49
-  );
+    doc.text(
+      `LinkedIn: ${linkedin}`,
+      20,
+      42
+    );
 
-  // LINE
+    doc.text(
+      `GitHub: ${github}`,
+      20,
+      49
+    );
 
-  doc.line(20, 55, 190, 55);
+    // LINE
 
-  // SUMMARY
+    doc.line(20, 55, 190, 55);
 
-  doc.setFontSize(16);
+    // SUMMARY
 
-  doc.text(
-    "Professional Summary",
-    20,
-    70
-  );
+    doc.setFontSize(16);
 
-  doc.setFontSize(12);
+    doc.text(
+      "Professional Summary",
+      20,
+      70
+    );
 
-  doc.text(
-    "Aspiring AI/ML Engineer with strong knowledge of Python, SQL, Machine Learning, and Full Stack Development. Passionate about building scalable AI-powered applications and solving real-world problems.",
-    20,
-    80,
-    { maxWidth: 170 }
-  );
+    doc.setFontSize(12);
 
-  // SKILLS
+    doc.text(
+      summary ||
+      "Passionate software developer with strong technical skills.",
+      20,
+      80,
+      { maxWidth: 170 }
+    );
 
-  doc.setFontSize(16);
+    // SKILLS
 
-  doc.text(
-    "Technical Skills",
-    20,
-    110
-  );
+    doc.setFontSize(16);
 
-  doc.setFontSize(12);
+    doc.text(
+      "Technical Skills",
+      20,
+      110
+    );
 
-  doc.text(
-    Array.isArray(result.skills)
-      ? result.skills.join(", ")
-      : "No skills found",
-    20,
-    120,
-    { maxWidth: 170 }
-  );
+    doc.setFontSize(12);
 
-  // PROJECTS
+    doc.text(
+      Array.isArray(result.skills)
+        ? result.skills.join(", ")
+        : "No skills found",
+      20,
+      120,
+      { maxWidth: 170 }
+    );
 
-  doc.setFontSize(16);
+    // ATS SCORE
 
-  doc.text(
-    "Projects",
-    20,
-    145
-  );
+    doc.setFontSize(16);
 
-  doc.setFontSize(12);
+    doc.text(
+      "ATS Match Score",
+      20,
+      150
+    );
 
-  doc.text(
-    "• AI Resume Analyzer - Built an AI-powered resume screening platform using React, Node.js, Express, and Gemini AI.",
-    20,
-    155,
-    { maxWidth: 170 }
-  );
+    doc.setFontSize(14);
 
-  doc.text(
-    "• ShopIQ - Smart e-commerce platform with AI chatbot and dynamic pricing features.",
-    20,
-    170,
-    { maxWidth: 170 }
-  );
+    doc.text(
+      `${result.atsScore}% Match`,
+      20,
+      160
+    );
 
-  // ATS SCORE
+    // SUGGESTED ROLES
 
-  doc.setFontSize(16);
+    doc.setFontSize(16);
 
-  doc.text(
-    "ATS Match Score",
-    20,
-    195
-  );
+    doc.text(
+      "Suggested Roles",
+      20,
+      185
+    );
 
-  doc.setFontSize(14);
+    doc.setFontSize(12);
 
-  doc.text(
-    `${result.atsScore}% Match`,
-    20,
-    205
-  );
+    doc.text(
+      Array.isArray(result.suggestedRoles)
+        ? result.suggestedRoles.join(", ")
+        : "No roles found",
+      20,
+      195,
+      { maxWidth: 170 }
+    );
 
-  // SUGGESTED ROLES
+    doc.save(
+      "ATS-Friendly-Resume.pdf"
+    );
 
-  doc.setFontSize(16);
+  };
 
-  doc.text(
-    "Suggested Roles",
-    20,
-    225
-  );
-
-  doc.setFontSize(12);
-
-  doc.text(
-    Array.isArray(result.suggestedRoles)
-      ? result.suggestedRoles.join(", ")
-      : "No roles found",
-    20,
-    235,
-    { maxWidth: 170 }
-  );
-
-  doc.save(
-    "ATS-Friendly-Resume.pdf"
-  );
-
-};
+  // CHART DATA
 
   const pieData = [
 
@@ -366,6 +346,70 @@ const generateATSResume = () => {
 
       <div className="max-w-5xl mx-auto bg-[#0f172a] p-10 rounded-3xl shadow-lg">
 
+        {/* USER DETAILS */}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) =>
+              setName(e.target.value)
+            }
+            className="p-4 rounded-xl bg-[#1e293b]"
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+            className="p-4 rounded-xl bg-[#1e293b]"
+          />
+
+          <input
+            type="text"
+            placeholder="LinkedIn URL"
+            value={linkedin}
+            onChange={(e) =>
+              setLinkedin(e.target.value)
+            }
+            className="p-4 rounded-xl bg-[#1e293b]"
+          />
+
+          <input
+            type="text"
+            placeholder="GitHub URL"
+            value={github}
+            onChange={(e) =>
+              setGithub(e.target.value)
+            }
+            className="p-4 rounded-xl bg-[#1e293b]"
+          />
+
+        </div>
+
+        <textarea
+          placeholder="Professional Summary"
+          value={summary}
+          onChange={(e) =>
+            setSummary(e.target.value)
+          }
+          className="
+            w-full
+            h-32
+            p-4
+            rounded-2xl
+            bg-[#1e293b]
+            mb-6
+          "
+        />
+
+        {/* RESUME */}
+
         <input
           type="file"
           accept=".pdf"
@@ -398,6 +442,8 @@ const generateATSResume = () => {
             mb-6
           "
         />
+
+        {/* BUTTONS */}
 
         <div className="flex flex-wrap gap-4 mt-8">
 
@@ -438,8 +484,6 @@ const generateATSResume = () => {
                   rounded-2xl
                   text-base
                   font-semibold
-                  transition-all
-                  duration-300
                 "
               >
                 Download Report PDF
@@ -463,8 +507,6 @@ const generateATSResume = () => {
                   rounded-2xl
                   text-base
                   font-semibold
-                  transition-all
-                  duration-300
                 "
               >
                 Generate ATS Resume
@@ -475,6 +517,8 @@ const generateATSResume = () => {
           }
 
         </div>
+
+        {/* ATS ANALYTICS */}
 
         {
 
@@ -543,19 +587,9 @@ const generateATSResume = () => {
 
                 </div>
 
-                <div className="mt-4 text-lg text-gray-300">
-
-                  {
-                    result.atsScore >= 75
-                    ? "Excellent ATS Match"
-                    : result.atsScore >= 50
-                    ? "Good ATS Match"
-                    : "Needs Improvement"
-                  }
-
-                </div>
-
               </div>
+
+              {/* SKILLS ANALYTICS */}
 
               <div className="bg-[#0f172a] p-6 rounded-3xl mt-10">
 
@@ -564,7 +598,7 @@ const generateATSResume = () => {
                 </h2>
 
                 <p className="text-gray-400 mb-6">
-                  AI-estimated proficiency level for detected skills
+                  AI-estimated proficiency level
                 </p>
 
                 <div
@@ -603,111 +637,6 @@ const generateATSResume = () => {
                     </BarChart>
 
                   </ResponsiveContainer>
-
-                </div>
-
-              </div>
-
-              <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    ATS Match
-                  </h2>
-
-                  <p className="text-5xl text-blue-400">
-                    {result.atsScore}%
-                  </p>
-
-                  <div className="w-full bg-gray-700 rounded-full h-4 mt-4">
-
-                    <div
-                      className="
-                        bg-blue-500
-                        h-4
-                        rounded-full
-                        transition-all
-                        duration-500
-                      "
-                      style={{
-                        width: `${result.atsScore}%`
-                      }}
-                    ></div>
-
-                  </div>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    Skills
-                  </h2>
-
-                  <p>
-                    {
-                      Array.isArray(
-                        result.skills
-                      )
-                        ? result.skills.join(", ")
-                        : result.skills
-                    }
-                  </p>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    Missing Skills
-                  </h2>
-
-                  <p>
-                    {
-                      Array.isArray(
-                        result.missingSkills
-                      )
-                        ? result.missingSkills.join(", ")
-                        : result.missingSkills
-                    }
-                  </p>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    Suggested Roles
-                  </h2>
-
-                  <p>
-                    {
-                      Array.isArray(
-                        result.suggestedRoles
-                      )
-                        ? result.suggestedRoles.join(", ")
-                        : result.suggestedRoles
-                    }
-                  </p>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl md:col-span-2">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    AI Feedback
-                  </h2>
-
-                  <p>
-                    {
-                      Array.isArray(
-                        result.feedback
-                      )
-                        ? result.feedback.join(", ")
-                        : result.feedback
-                    }
-                  </p>
 
                 </div>
 
