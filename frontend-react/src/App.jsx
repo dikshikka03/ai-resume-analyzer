@@ -92,57 +92,7 @@ function App() {
     if (!result) {
       return;
     }
-const generateATSResume = () => {
 
-  const doc = new jsPDF();
-
-  doc.setFontSize(22);
-
-  doc.text(
-    "ATS Friendly Resume",
-    20,
-    20
-  );
-
-  doc.setFontSize(14);
-
-  doc.text(
-    "Name: Dikshika Sachdeva",
-    20,
-    40
-  );
-
-  doc.text(
-    "Skills:",
-    20,
-    60
-  );
-
-  doc.text(
-    result.skills.join(", "),
-    20,
-    75,
-    { maxWidth: 170 }
-  );
-
-  doc.text(
-    "Suggested Roles:",
-    20,
-    100
-  );
-
-  doc.text(
-    result.suggestedRoles.join(", "),
-    20,
-    115,
-    { maxWidth: 170 }
-  );
-
-  doc.save(
-    "ATS-Resume.pdf"
-  );
-
-};
     const doc = new jsPDF();
 
     doc.setFontSize(18);
@@ -168,28 +118,44 @@ const generateATSResume = () => {
     );
 
     doc.text(
-      `Skills: ${result.skills.join(", ")}`,
+      `Skills: ${
+        Array.isArray(result.skills)
+          ? result.skills.join(", ")
+          : "No skills found"
+      }`,
       20,
       75,
       { maxWidth: 170 }
     );
 
     doc.text(
-      `Missing Skills: ${result.missingSkills.join(", ")}`,
+      `Missing Skills: ${
+        Array.isArray(result.missingSkills)
+          ? result.missingSkills.join(", ")
+          : "No missing skills"
+      }`,
       20,
       105,
       { maxWidth: 170 }
     );
 
     doc.text(
-      `Suggested Roles: ${result.suggestedRoles.join(", ")}`,
+      `Suggested Roles: ${
+        Array.isArray(result.suggestedRoles)
+          ? result.suggestedRoles.join(", ")
+          : "No roles found"
+      }`,
       20,
       135,
       { maxWidth: 170 }
     );
 
     doc.text(
-      `Feedback: ${result.feedback.join(", ")}`,
+      `Feedback: ${
+        Array.isArray(result.feedback)
+          ? result.feedback.join(", ")
+          : "No feedback"
+      }`,
       20,
       165,
       { maxWidth: 170 }
@@ -197,6 +163,66 @@ const generateATSResume = () => {
 
     doc.save(
       "resume-analysis.pdf"
+    );
+
+  };
+
+  const generateATSResume = () => {
+
+    if (!result) {
+      return;
+    }
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(22);
+
+    doc.text(
+      "ATS Friendly Resume",
+      20,
+      20
+    );
+
+    doc.setFontSize(14);
+
+    doc.text(
+      "Name: Dikshika Sachdeva",
+      20,
+      40
+    );
+
+    doc.text(
+      "Skills:",
+      20,
+      60
+    );
+
+    doc.text(
+      Array.isArray(result.skills)
+        ? result.skills.join(", ")
+        : "No skills found",
+      20,
+      75,
+      { maxWidth: 170 }
+    );
+
+    doc.text(
+      "Suggested Roles:",
+      20,
+      110
+    );
+
+    doc.text(
+      Array.isArray(result.suggestedRoles)
+        ? result.suggestedRoles.join(", ")
+        : "No roles found",
+      20,
+      125,
+      { maxWidth: 170 }
+    );
+
+    doc.save(
+      "ATS-Resume.pdf"
     );
 
   };
@@ -277,81 +303,76 @@ const generateATSResume = () => {
           "
         />
 
-        <div className="flex flex-col gap-6 mt-10">
+        <div className="flex flex-wrap gap-4 mt-8">
 
-          <div className="flex flex-wrap gap-5 mt-10">
-
-            <button
-              onClick={uploadResume}
-              className="
-                bg-blue-600
-                hover:bg-blue-700
-                px-5
-                py-3
-                rounded-2xl
-                text-base
-                font-semibold
-                transition-all duration-300
-              "
-            >
-
-              {
-                loading
-                  ? "Uploading..."
-                  : "Upload Resume"
-              }
-
-            </button>
+          <button
+            onClick={uploadResume}
+            className="
+              bg-blue-600
+              hover:bg-blue-700
+              px-5
+              py-3
+              rounded-2xl
+              text-base
+              font-semibold
+              transition-all
+              duration-300
+            "
+          >
 
             {
-
-              result && (
-
-                <button
-                  onClick={downloadPDF}
-                  className="
-                    bg-green-600
-                    hover:bg-green-700
-                    px-5
-                    py-3
-                    rounded-2xl
-                    text-base
-                    font-semibold
-                    transition-all duration-300
-                  "
-                >
-                  Download Report PDF
-                </button>
-
-              )
-
+              loading
+                ? "Uploading..."
+                : "Upload Resume"
             }
 
-          </div>
+          </button>
 
           {
 
             result && (
 
-              <div className="mt-6">
-                
-<button
-  onClick={generateATSResume}
-                  className="
-                    bg-purple-600
-                    hover:bg-purple-700
-                    px-5
-                    py-3
-                    rounded-2xl
-                    text-base
-                    font-semibold
-                    transition-all duration-300
-                  "
-                >
-                  Generate ATS Resume
-                </button>
+              <button
+                onClick={downloadPDF}
+                className="
+                  bg-green-600
+                  hover:bg-green-700
+                  px-5
+                  py-3
+                  rounded-2xl
+                  text-base
+                  font-semibold
+                  transition-all
+                  duration-300
+                "
+              >
+                Download Report PDF
+              </button>
 
-              </div>
+            )
+
+          }
+
+          {
+
+            result && (
+
+              <button
+                onClick={generateATSResume}
+                className="
+                  bg-purple-600
+                  hover:bg-purple-700
+                  px-5
+                  py-3
+                  rounded-2xl
+                  text-base
+                  font-semibold
+                  transition-all
+                  duration-300
+                "
+              >
+                Generate ATS Resume
+              </button>
 
             )
 
@@ -442,13 +463,13 @@ const generateATSResume = () => {
 
               <div className="bg-[#0f172a] p-6 rounded-3xl mt-10">
 
-                <h2 className="text-3xl font-bold mb-6">
+                <h2 className="text-3xl font-bold mb-2">
                   Skills Analytics
                 </h2>
 
                 <p className="text-gray-400 mb-6">
-  AI-estimated proficiency level for detected skills
-</p>
+                  AI-estimated proficiency level for detected skills
+                </p>
 
                 <div
                   style={{
