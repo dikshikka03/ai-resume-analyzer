@@ -236,11 +236,12 @@ function App() {
               className="
                 bg-blue-600
                 hover:bg-blue-700
-                px-6
+                px-5
                 py-3
                 rounded-2xl
-                text-3g
+                text-base
                 font-semibold
+                transition-all duration-300
               "
             >
 
@@ -261,11 +262,12 @@ function App() {
                   className="
                     bg-green-600
                     hover:bg-green-700
-                    px-6
+                    px-5
                     py-3
                     rounded-2xl
-                    text-3g
+                    text-base
                     font-semibold
+                    transition-all duration-300
                   "
                 >
                   Download Report PDF
@@ -287,11 +289,12 @@ function App() {
                   className="
                     bg-purple-600
                     hover:bg-purple-700
-                    px-6
+                    px-5
                     py-3
                     rounded-2xl
-                    text-3g
+                    text-base
                     font-semibold
+                    transition-all duration-300
                   "
                 >
                   Generate ATS Resume
