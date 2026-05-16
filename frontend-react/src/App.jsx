@@ -539,7 +539,9 @@ function App() {
                 <div className="flex gap-4 mt-6">
 
                   <button
-                    onClick={generateATSResume}
+  onClick={() =>
+    setShowForm(true)
+  }
                     className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-2xl font-semibold"
                   >
                     Generate Resume
