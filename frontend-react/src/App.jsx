@@ -30,8 +30,6 @@ function App() {
   const [showForm, setShowForm] =
     useState(false);
 
-  // ATS FORM STATES
-
   const [name, setName] = useState("");
 
   const [email, setEmail] = useState("");
@@ -68,7 +66,6 @@ function App() {
   const [experience, setExperience] =
     useState("");
 
-  // UPLOAD RESUME
 
   const uploadResume = async () => {
 
@@ -93,7 +90,7 @@ function App() {
       );
 
       const response = await fetch(
-        "https://ai-resume-analyzer-p3l4.onrender.comm/uplaod",
+        "https://ai-resume-analyzer-p3l4.onrender.com/uplaod",
         {
           method: "POST",
           body: formData,
@@ -131,7 +128,6 @@ function App() {
 
   };
 
-  // DOWNLOAD ANALYSIS REPORT
 
   const downloadPDF = () => {
 
