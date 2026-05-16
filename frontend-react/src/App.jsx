@@ -90,7 +90,7 @@ function App() {
       );
 
       const response = await fetch(
-        "https://ai-resume-analyzer-p3l4.onrender.com/uplaod",
+        "https://ai-resume-analyzer-p3l4.onrender.com/upload",
         {
           method: "POST",
           body: formData,
