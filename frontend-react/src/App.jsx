@@ -785,18 +785,6 @@ function App() {
 }
 
 export default App;
-```
 
-After replacing App.jsx:
 
-1. Save
-2. Run frontend locally
-3. Push:
 
-```bash
-git add .
-git commit -m "Fixed frontend and backend connection"
-git push
-```
-
-Then Vercel should work properly for everyone.
