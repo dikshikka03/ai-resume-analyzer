@@ -536,6 +536,32 @@ function App() {
     rounded-xl
     bg-[#1e293b]
   "
+/><input
+  type="text"
+  placeholder="Phone Number"
+  value={phone}
+  onChange={(e) =>
+    setPhone(e.target.value)
+  }
+  className="
+    p-4
+    rounded-xl
+    bg-[#1e293b]
+  "
+/>
+
+<input
+  type="text"
+  placeholder="LinkedIn URL"
+  value={linkedin}
+  onChange={(e) =>
+    setLinkedin(e.target.value)
+  }
+  className="
+    p-4
+    rounded-xl
+    bg-[#1e293b]
+  "
 />
 
                   <input type="text" placeholder="LinkedIn URL" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
