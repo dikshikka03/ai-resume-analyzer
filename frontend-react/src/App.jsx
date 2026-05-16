@@ -38,6 +38,8 @@ function App() {
 
   const [email, setEmail] = useState("");
 
+  const [phone, setPhone] = useState("");
+
   const [linkedin, setLinkedin] =
     useState("");
 
@@ -93,7 +95,7 @@ function App() {
       );
 
       const response = await fetch(
-        "https://ai-resume-analyzer-p3l4.onrender.com/upload",
+        "https://ai-resume-analyzer-production-557e.up.railway.app/upload",
         {
           method: "POST",
           body: formData,
@@ -521,6 +523,20 @@ function App() {
                   <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
 
                   <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+
+                   <input
+  type="text"
+  placeholder="Phone Number"
+  value={phone}
+  onChange={(e) =>
+    setPhone(e.target.value)
+  }
+  className="
+    p-4
+    rounded-xl
+    bg-[#1e293b]
+  "
+/>
 
                   <input type="text" placeholder="LinkedIn URL" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
 
