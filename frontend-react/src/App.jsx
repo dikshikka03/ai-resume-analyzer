@@ -1,4 +1,3 @@
-
 import {
   PieChart,
   Pie,
@@ -27,46 +26,6 @@ function App() {
 
   const [loading, setLoading] = useState(false);
 
-  const [showForm, setShowForm] =
-    useState(false);
-
-  const [name, setName] = useState("");
-
-  const [email, setEmail] = useState("");
-
-  const [phone, setPhone] = useState("");
-
-  const [linkedin, setLinkedin] =
-    useState("");
-
-  const [github, setGithub] =
-    useState("");
-
-  const [summary, setSummary] =
-    useState("");
-
-  const [college, setCollege] =
-    useState("");
-
-  const [degree, setDegree] =
-    useState("");
-
-  const [gpa, setGpa] =
-    useState("");
-
-  const [languages, setLanguages] =
-    useState("");
-
-  const [projects, setProjects] =
-    useState("");
-
-  const [certifications, setCertifications] =
-    useState("");
-
-  const [experience, setExperience] =
-    useState("");
-
-
   const uploadResume = async () => {
 
     try {
@@ -90,7 +49,7 @@ function App() {
       );
 
       const response = await fetch(
-        "https://ai-resume-analyzer-p3l4.onrender.com/upload",
+        "https://ai-resume-analyzer-production-557e.up.railway.app/upload",
         {
           method: "POST",
           body: formData,
@@ -128,14 +87,15 @@ function App() {
 
   };
 
-
   const downloadPDF = () => {
 
-    if (!result) return;
+    if (!result) {
+      return;
+    }
 
     const doc = new jsPDF();
 
-    doc.setFontSize(22);
+    doc.setFontSize(18);
 
     doc.text(
       "AI Resume Analysis Report",
@@ -152,30 +112,36 @@ function App() {
     );
 
     doc.text(
-      `Skills: ${result.skills?.join(", ")}`,
+      `Resume Score: ${result.resumeScore}`,
       20,
-      60,
+      55
+    );
+
+    doc.text(
+      `Skills: ${result.skills.join(", ")}`,
+      20,
+      75,
       { maxWidth: 170 }
     );
 
     doc.text(
-      `Missing Skills: ${result.missingSkills?.join(", ")}`,
+      `Missing Skills: ${result.missingSkills.join(", ")}`,
       20,
-      90,
+      105,
       { maxWidth: 170 }
     );
 
     doc.text(
-      `Suggested Roles: ${result.suggestedRoles?.join(", ")}`,
+      `Suggested Roles: ${result.suggestedRoles.join(", ")}`,
       20,
-      120,
+      135,
       { maxWidth: 170 }
     );
 
     doc.text(
-      `Feedback: ${result.feedback}`,
+      `Feedback: ${result.feedback.join(", ")}`,
       20,
-      150,
+      165,
       { maxWidth: 170 }
     );
 
@@ -184,191 +150,6 @@ function App() {
     );
 
   };
-
-  // GENERATE ATS RESUME PDF
-
-  const generateATSResume = () => {
-
-    const doc = new jsPDF();
-
-    doc.setFontSize(24);
-
-    doc.text(
-      name || "Your Name",
-      20,
-      20
-    );
-
-    doc.setFontSize(11);
-
-    doc.text(
-      `Email: ${email}`,
-      20,
-      35
-    );
-
-    doc.text(
-      `Phone: ${phone}`,
-      20,
-      42
-    );
-
-    doc.text(
-      `LinkedIn: ${linkedin}`,
-      20,
-      49
-    );
-
-    doc.text(
-      `GitHub: ${github}`,
-      20,
-      56
-    );
-
-    doc.line(20, 63, 190, 63);
-
-    // SUMMARY
-
-    doc.setFontSize(16);
-
-    doc.text(
-      "Professional Summary",
-      20,
-      80
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-      summary,
-      20,
-      90,
-      { maxWidth: 170 }
-    );
-
-    // SKILLS
-
-    doc.setFontSize(16);
-
-    doc.text(
-      "Technical Skills",
-      20,
-      125
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-      result?.skills?.join(", ") || "",
-      20,
-      135,
-      { maxWidth: 170 }
-    );
-
-    // EDUCATION
-
-    doc.setFontSize(16);
-
-    doc.text(
-      "Education",
-      20,
-      165
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-      `${degree} - ${college}`,
-      20,
-      175
-    );
-
-    doc.text(
-      `GPA/CGPA: ${gpa}`,
-      20,
-      183
-    );
-
-    // SECOND PAGE
-
-    doc.addPage();
-
-    doc.setFontSize(16);
-
-    doc.text(
-      "Projects",
-      20,
-      20
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-      projects,
-      20,
-      30,
-      { maxWidth: 170 }
-    );
-
-    doc.setFontSize(16);
-
-    doc.text(
-      "Languages Known",
-      20,
-      100
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-      languages,
-      20,
-      110
-    );
-
-    doc.setFontSize(16);
-
-    doc.text(
-      "Certifications",
-      20,
-      140
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-      certifications,
-      20,
-      150,
-      { maxWidth: 170 }
-    );
-
-    doc.setFontSize(16);
-
-    doc.text(
-      "Experience",
-      20,
-      210
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-      experience,
-      20,
-      220,
-      { maxWidth: 170 }
-    );
-
-    doc.save(
-      "ATS-Friendly-Resume.pdf"
-    );
-
-    setShowForm(false);
-
-  };
-
-  // CHART DATA
 
   const pieData = [
 
@@ -392,22 +173,16 @@ function App() {
   ];
 
   const skillData =
-    result?.skills?.slice(0, 6).map(
-      (skill, index) => ({
+    result?.skills?.map((skill) => ({
 
-        skill,
+      skill,
 
-        value: [
-          90,
-          85,
-          80,
-          75,
-          95,
-          88
-        ][index]
+      value:
+        Math.floor(
+          Math.random() * 40
+        ) + 60
 
-      })
-    ) || [];
+    })) || [];
 
   return (
 
@@ -417,7 +192,7 @@ function App() {
         AI Resume Analyzer
       </h1>
 
-      <div className="max-w-6xl mx-auto bg-[#0f172a] p-10 rounded-3xl shadow-lg">
+      <div className="max-w-5xl mx-auto bg-[#0f172a] p-10 rounded-3xl shadow-lg">
 
         <input
           type="file"
@@ -438,53 +213,94 @@ function App() {
               e.target.value
             )
           }
-          className="w-full h-64 p-4 rounded-2xl bg-[#1e293b] border border-gray-600 mb-6"
+          className="
+            w-full
+            h-64
+            p-4
+            rounded-2xl
+            bg-[#1e293b]
+            text-white
+            border
+            border-gray-600
+            outline-none
+            mb-6
+          "
         />
 
-        {/* BUTTONS */}
+        <div className="flex flex-col gap-6 mt-10">
 
-        <div className="flex flex-wrap gap-4 mt-8">
+          <div className="flex flex-wrap gap-5 mt-10">
 
-          <button
-            onClick={uploadResume}
-            className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl text-base font-semibold"
-          >
+            <button
+              onClick={uploadResume}
+              className="
+                bg-blue-600
+                hover:bg-blue-700
+                px-5
+                py-3
+                rounded-2xl
+                text-base
+                font-semibold
+                transition-all duration-300
+              "
+            >
+
+              {
+                loading
+                  ? "Uploading..."
+                  : "Upload Resume"
+              }
+
+            </button>
 
             {
-              loading
-                ? "Uploading..."
-                : "Upload Resume"
+
+              result && (
+
+                <button
+                  onClick={downloadPDF}
+                  className="
+                    bg-green-600
+                    hover:bg-green-700
+                    px-5
+                    py-3
+                    rounded-2xl
+                    text-base
+                    font-semibold
+                    transition-all duration-300
+                  "
+                >
+                  Download Report PDF
+                </button>
+
+              )
+
             }
 
-          </button>
+          </div>
 
           {
 
             result && (
 
-              <button
-                onClick={downloadPDF}
-                className="bg-green-600 hover:bg-green-700 px-5 py-3 rounded-2xl text-base font-semibold"
-              >
-                Download Report PDF
-              </button>
+              <div className="mt-6">
 
-            )
+                <button
+                  className="
+                    bg-purple-600
+                    hover:bg-purple-700
+                    px-5
+                    py-3
+                    rounded-2xl
+                    text-base
+                    font-semibold
+                    transition-all duration-300
+                  "
+                >
+                  Generate ATS Resume
+                </button>
 
-          }
-
-          {
-
-            result && (
-
-              <button
-                onClick={() =>
-                  setShowForm(true)
-                }
-                className="bg-purple-600 hover:bg-purple-700 px-5 py-3 rounded-2xl text-base font-semibold"
-              >
-                Generate ATS Resume
-              </button>
+              </div>
 
             )
 
@@ -492,68 +308,244 @@ function App() {
 
         </div>
 
-        {/* ATS MODAL */}
-
         {
 
-          showForm && (
+          result && (
 
-            <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 overflow-y-auto p-4">
+            <>
 
-              <div className="bg-[#0f172a] p-8 rounded-3xl w-full max-w-3xl">
+              <div className="bg-[#0f172a] p-8 rounded-3xl mt-10 text-center">
 
-                <h2 className="text-3xl font-bold mb-6">
-                  ATS Resume Details
+                <h2 className="text-3xl font-bold mb-2">
+                  ATS Analytics
                 </h2>
 
-                <div className="grid grid-cols-1 gap-4">
+                <p className="text-gray-400 mb-6">
+                  Resume compatibility with job description
+                </p>
 
-                  <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                <div className="flex justify-center">
 
-                  <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                  <PieChart
+                    width={350}
+                    height={350}
+                  >
 
-                  <input type="text" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={90}
+                      outerRadius={120}
+                      dataKey="value"
+                    >
 
-                  <input type="text" placeholder="LinkedIn URL" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                      {
 
-                  <input type="text" placeholder="GitHub URL" value={github} onChange={(e) => setGithub(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                        pieData.map(
+                          (entry, index) => (
 
-                  <textarea placeholder="Professional Summary" value={summary} onChange={(e) => setSummary(e.target.value)} className="p-4 rounded-xl bg-[#1e293b] h-28" />
+                            <Cell
+                              key={index}
+                              fill={COLORS[index]}
+                            />
 
-                  <input type="text" placeholder="College Name" value={college} onChange={(e) => setCollege(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                          )
+                        )
 
-                  <input type="text" placeholder="Degree" value={degree} onChange={(e) => setDegree(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                      }
 
-                  <input type="text" placeholder="GPA / CGPA" value={gpa} onChange={(e) => setGpa(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                    </Pie>
 
-                  <input type="text" placeholder="Languages Known" value={languages} onChange={(e) => setLanguages(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
+                    <Tooltip />
 
-                 <textarea placeholder="Projects" value={projects} onChange={(e) => setProjects(e.target.value)} className="p-4 rounded-xl bg-[#1e293b] h-28" />
+                    <text
+                      x="50%"
+                      y="50%"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fill="white"
+                      fontSize="28"
+                      fontWeight="bold"
+                    >
+                      {result.atsScore}%
+                    </text>
 
-                  <textarea placeholder="Certifications" value={certifications} onChange={(e) => setCertifications(e.target.value)} className="p-4 rounded-xl bg-[#1e293b] h-24" />
-
-                  <textarea placeholder="Experience" value={experience} onChange={(e) => setExperience(e.target.value)} className="p-4 rounded-xl bg-[#1e293b] h-24" />
+                  </PieChart>
 
                 </div>
 
-                <div className="flex gap-4 mt-6">
+                <div className="mt-4 text-lg text-gray-300">
 
-               
-
-                  <button
-                    onClick={() =>
-                      setShowForm(false)
-                    }
-                    className="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-2xl font-semibold"
-                  >
-                    Cancel
-                  </button>
+                  {
+                    result.atsScore >= 75
+                    ? "Excellent ATS Match"
+                    : result.atsScore >= 50
+                    ? "Good ATS Match"
+                    : "Needs Improvement"
+                  }
 
                 </div>
 
               </div>
 
-            </div>
+              <div className="bg-[#0f172a] p-6 rounded-3xl mt-10">
+
+                <h2 className="text-3xl font-bold mb-6">
+                  Skills Analytics
+                </h2>
+
+                <p className="text-gray-400 mb-6">
+  AI-estimated proficiency level for detected skills
+</p>
+
+                <div
+                  style={{
+                    width: "100%",
+                    height: 400
+                  }}
+                >
+
+                  <ResponsiveContainer
+                    width="100%"
+                    height="100%"
+                  >
+
+                    <BarChart
+                      data={skillData}
+                    >
+
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                      />
+
+                      <XAxis
+                        dataKey="skill"
+                      />
+
+                      <YAxis />
+
+                      <Tooltip />
+
+                      <Bar
+                        dataKey="value"
+                        fill="#3B82F6"
+                      />
+
+                    </BarChart>
+
+                  </ResponsiveContainer>
+
+                </div>
+
+              </div>
+
+              <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div className="bg-[#0f172a] p-6 rounded-3xl">
+
+                  <h2 className="text-3xl font-bold mb-4">
+                    ATS Match
+                  </h2>
+
+                  <p className="text-5xl text-blue-400">
+                    {result.atsScore}%
+                  </p>
+
+                  <div className="w-full bg-gray-700 rounded-full h-4 mt-4">
+
+                    <div
+                      className="
+                        bg-blue-500
+                        h-4
+                        rounded-full
+                        transition-all
+                        duration-500
+                      "
+                      style={{
+                        width: `${result.atsScore}%`
+                      }}
+                    ></div>
+
+                  </div>
+
+                </div>
+
+                <div className="bg-[#0f172a] p-6 rounded-3xl">
+
+                  <h2 className="text-3xl font-bold mb-4">
+                    Skills
+                  </h2>
+
+                  <p>
+                    {
+                      Array.isArray(
+                        result.skills
+                      )
+                        ? result.skills.join(", ")
+                        : result.skills
+                    }
+                  </p>
+
+                </div>
+
+                <div className="bg-[#0f172a] p-6 rounded-3xl">
+
+                  <h2 className="text-3xl font-bold mb-4">
+                    Missing Skills
+                  </h2>
+
+                  <p>
+                    {
+                      Array.isArray(
+                        result.missingSkills
+                      )
+                        ? result.missingSkills.join(", ")
+                        : result.missingSkills
+                    }
+                  </p>
+
+                </div>
+
+                <div className="bg-[#0f172a] p-6 rounded-3xl">
+
+                  <h2 className="text-3xl font-bold mb-4">
+                    Suggested Roles
+                  </h2>
+
+                  <p>
+                    {
+                      Array.isArray(
+                        result.suggestedRoles
+                      )
+                        ? result.suggestedRoles.join(", ")
+                        : result.suggestedRoles
+                    }
+                  </p>
+
+                </div>
+
+                <div className="bg-[#0f172a] p-6 rounded-3xl md:col-span-2">
+
+                  <h2 className="text-3xl font-bold mb-4">
+                    AI Feedback
+                  </h2>
+
+                  <p>
+                    {
+                      Array.isArray(
+                        result.feedback
+                      )
+                        ? result.feedback.join(", ")
+                        : result.feedback
+                    }
+                  </p>
+
+                </div>
+
+              </div>
+
+            </>
 
           )
 
