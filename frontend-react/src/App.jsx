@@ -1,5 +1,3 @@
-// COMPLETE FINAL APP.JSX
-
 import {
   PieChart,
   Pie,
@@ -132,6 +130,137 @@ function App() {
     }
 
   };
+
+  // TRENDING TECH SKILLS
+
+  const trendingSkills = [
+
+    "react",
+    "node.js",
+    "next.js",
+    "typescript",
+    "mongodb",
+    "express",
+    "python",
+    "java",
+    "c++",
+    "sql",
+    "machine learning",
+    "ai",
+    "aws",
+    "docker",
+    "kubernetes",
+    "git",
+    "javascript"
+
+  ];
+
+  // USER SKILLS
+
+  const userSkills =
+
+    result?.skills?.map(
+      (skill) =>
+        skill.toLowerCase()
+    ) || [];
+
+  // MATCHED SKILLS
+
+  const matchedSkills =
+
+    trendingSkills.filter(
+      (skill) =>
+
+        userSkills.some(
+          (userSkill) =>
+
+            userSkill.includes(skill)
+        )
+    );
+
+  // MISSING SKILLS
+
+  const missingSkills =
+
+    trendingSkills.filter(
+      (skill) =>
+
+        !matchedSkills.includes(skill)
+    );
+
+  // REALISTIC ATS SCORE
+
+  const atsScore =
+
+    Math.min(
+
+      Math.round(
+        (
+          matchedSkills.length /
+          trendingSkills.length
+        ) * 100
+      ),
+
+      95
+
+    );
+
+  // ATS MESSAGE
+
+  const atsMessage =
+
+    atsScore >= 80
+
+      ? "Excellent ATS compatibility"
+
+      : atsScore >= 60
+
+      ? "Good profile but needs improvement"
+
+      : atsScore >= 40
+
+      ? "Average ATS match"
+
+      : "Low ATS match. Add more relevant skills";
+
+  // PIE DATA
+
+  const pieData = [
+
+    {
+      name: "Matched",
+      value: atsScore
+    },
+
+    {
+      name: "Missing",
+      value:
+        100 - atsScore
+    }
+
+  ];
+
+  // SKILL ANALYTICS
+
+  const topSkills =
+
+    matchedSkills.slice(0, 6);
+
+  const skillData =
+
+    topSkills.map(
+      (skill) => ({
+
+        skill,
+
+        value:
+
+          Math.floor(
+            Math.random() * 20
+          ) + 75
+
+      })
+    );
 
   // DOWNLOAD REPORT PDF
 
@@ -372,137 +501,6 @@ function App() {
 
   };
 
-  // TRENDING TECH SKILLS
-
-  const trendingSkills = [
-
-    "react",
-    "node.js",
-    "next.js",
-    "typescript",
-    "mongodb",
-    "express",
-    "python",
-    "java",
-    "c++",
-    "sql",
-    "machine learning",
-    "ai",
-    "aws",
-    "docker",
-    "kubernetes",
-    "git",
-    "javascript"
-
-  ];
-
-  // USER SKILLS
-
-  const userSkills =
-
-    result?.skills?.map(
-      (skill) =>
-        skill.toLowerCase()
-    ) || [];
-
-  // MATCHED SKILLS
-
-  const matchedSkills =
-
-    trendingSkills.filter(
-      (skill) =>
-
-        userSkills.some(
-          (userSkill) =>
-
-            userSkill.includes(skill)
-        )
-    );
-
-  // MISSING SKILLS
-
-  const missingSkills =
-
-    trendingSkills.filter(
-      (skill) =>
-
-        !matchedSkills.includes(skill)
-    );
-
-  // REALISTIC ATS SCORE
-
-  const atsScore =
-
-    Math.min(
-
-      Math.round(
-        (
-          matchedSkills.length /
-          trendingSkills.length
-        ) * 100
-      ),
-
-      95
-
-    );
-
-  // PIE DATA
-
-  const pieData = [
-
-    {
-      name: "Matched",
-      value: atsScore
-    },
-
-    {
-      name: "Missing",
-      value:
-        100 - atsScore
-    }
-
-  ];
-
-  // SKILL ANALYTICS
-
-  const topSkills =
-
-    matchedSkills.slice(0, 6);
-
-  const skillData =
-
-    topSkills.map(
-      (skill) => ({
-
-        skill,
-
-        value:
-
-          Math.floor(
-            Math.random() * 20
-          ) + 75
-
-      })
-    );
-
-  // ATS MESSAGE
-
-  const atsMessage =
-
-    atsScore >= 80
-
-      ? "Excellent ATS compatibility"
-
-      : atsScore >= 60
-
-      ? "Good profile but needs improvement"
-
-      : atsScore >= 40
-
-      ? "Average ATS match"
-
-      : "Low ATS match. Add more relevant skills";
-
   return (
 
     <div className="min-h-screen bg-[#020617] text-white p-6">
@@ -594,6 +592,8 @@ function App() {
 
               <div className="space-y-6">
 
+                {/* ATS MATCH */}
+
                 <div className="bg-[#1e293b] p-6 rounded-3xl">
 
                   <h2 className="text-4xl font-bold mb-4">
@@ -610,6 +610,8 @@ function App() {
 
                 </div>
 
+                {/* SKILLS */}
+
                 <div className="bg-[#1e293b] p-6 rounded-3xl">
 
                   <h2 className="text-4xl font-bold mb-4">
@@ -617,12 +619,22 @@ function App() {
                   </h2>
 
                   <p className="text-lg leading-9">
+
                     {
-                      matchedSkills.join(", ")
+
+                      matchedSkills.length > 0
+
+                        ? matchedSkills.join(", ")
+
+                        : "No matching skills found"
+
                     }
+
                   </p>
 
                 </div>
+
+                {/* MISSING SKILLS */}
 
                 <div className="bg-[#1e293b] p-6 rounded-3xl">
 
@@ -641,6 +653,74 @@ function App() {
                             .join(", ")
 
                         : "No major missing skills"
+
+                    }
+
+                  </p>
+
+                </div>
+
+                {/* SUGGESTED ROLES */}
+
+                <div className="bg-[#1e293b] p-6 rounded-3xl">
+
+                  <h2 className="text-4xl font-bold mb-4">
+                    Suggested Roles
+                  </h2>
+
+                  <p className="text-lg leading-9">
+
+                    {
+
+                      matchedSkills.includes("machine learning")
+
+                        ? "AI/ML Engineer, Data Scientist"
+
+                        : matchedSkills.includes("react")
+
+                        ? "Frontend Developer, MERN Stack Developer"
+
+                        : matchedSkills.includes("java")
+
+                        ? "Java Developer, Backend Developer"
+
+                        : matchedSkills.includes("python")
+
+                        ? "Python Developer, Data Analyst"
+
+                        : "Software Developer"
+
+                    }
+
+                  </p>
+
+                </div>
+
+                {/* AI FEEDBACK */}
+
+                <div className="bg-[#1e293b] p-6 rounded-3xl">
+
+                  <h2 className="text-4xl font-bold mb-4">
+                    AI Feedback
+                  </h2>
+
+                  <p className="text-lg leading-9">
+
+                    {
+
+                      atsScore >= 80
+
+                        ? "Excellent resume. Strong ATS compatibility and good technical skills."
+
+                        : atsScore >= 60
+
+                        ? "Good resume but adding more trending technologies can improve ATS score."
+
+                        : atsScore >= 40
+
+                        ? "Resume needs improvements. Add more relevant projects and trending skills."
+
+                        : "Low ATS score. Improve resume structure, projects, and technical stack."
 
                     }
 
