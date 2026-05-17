@@ -26,6 +26,18 @@ function App() {
 
   const [loading, setLoading] = useState(false);
 
+  const [showForm, setShowForm] =
+  useState(false);
+
+const [name, setName] =
+  useState("");
+
+const [email, setEmail] =
+  useState("");
+
+const [phone, setPhone] =
+  useState("");
+
   const uploadResume = async () => {
 
     try {
@@ -172,15 +184,18 @@ function App() {
     "#10B981"
   ];
 
-  const skillData =
-    result?.skills?.map((skill) => ({
+const skillData =
+
+  result?.skills
+    ?.slice(0, 6)
+    .map((skill) => ({
 
       skill,
 
       value:
         Math.floor(
-          Math.random() * 40
-        ) + 60
+          Math.random() * 20
+        ) + 80
 
     })) || [];
 
@@ -285,21 +300,22 @@ function App() {
 
               <div className="mt-6">
 
-                <button
-                  className="
-                    bg-purple-600
-                    hover:bg-purple-700
-                    px-5
-                    py-3
-                    rounded-2xl
-                    text-base
-                    font-semibold
-                    transition-all duration-300
-                  "
-                >
-                  Generate ATS Resume
-                </button>
-
+          <button
+  onClick={() =>
+    setShowForm(true)
+  }
+  className="
+    bg-purple-600
+    hover:bg-purple-700
+    px-5
+    py-3
+    rounded-2xl
+    text-base
+    font-semibold
+  "
+>
+  Generate ATS Resume
+</button>
               </div>
 
             )
@@ -496,14 +512,18 @@ function App() {
                   </h2>
 
                   <p>
-                    {
-                      Array.isArray(
-                        result.missingSkills
-                      )
-                        ? result.missingSkills.join(", ")
-                        : result.missingSkills
-                    }
-                  </p>
+
+  {
+
+    result?.missingSkills?.length > 0
+
+      ? result.missingSkills.join(", ")
+
+      : "No major missing skills"
+
+  }
+
+</p>
 
                 </div>
 
@@ -550,7 +570,121 @@ function App() {
           )
 
         }
+{
 
+  showForm && (
+
+    <div className="
+      fixed
+      inset-0
+      bg-black/70
+      flex
+      items-center
+      justify-center
+      z-50
+      p-4
+      overflow-y-auto
+    ">
+
+      <div className="
+        bg-[#0f172a]
+        p-8
+        rounded-3xl
+        w-full
+        max-w-3xl
+      ">
+
+        <h2 className="
+          text-3xl
+          font-bold
+          mb-6
+        ">
+          ATS Resume Details
+        </h2>
+
+        <div className="
+          grid
+          grid-cols-1
+          gap-4
+        ">
+
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) =>
+              setName(e.target.value)
+            }
+            className="p-4 rounded-xl bg-[#1e293b]"
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+            className="p-4 rounded-xl bg-[#1e293b]"
+          />
+
+          <input
+            type="text"
+            placeholder="Phone Number"
+            value={phone}
+            onChange={(e) =>
+              setPhone(e.target.value)
+            }
+            className="p-4 rounded-xl bg-[#1e293b]"
+          />
+
+        </div>
+
+        <div className="
+          flex
+          gap-4
+          mt-6
+        ">
+
+          <button
+            onClick={generateATSResume}
+            className="
+              bg-purple-600
+              hover:bg-purple-700
+              px-6
+              py-3
+              rounded-2xl
+              font-semibold
+            "
+          >
+            Generate Resume
+          </button>
+
+          <button
+            onClick={() =>
+              setShowForm(false)
+            }
+            className="
+              bg-gray-600
+              hover:bg-gray-700
+              px-6
+              py-3
+              rounded-2xl
+              font-semibold
+            "
+          >
+            Cancel
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  )
+
+}
       </div>
 
     </div>
