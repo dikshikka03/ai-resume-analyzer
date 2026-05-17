@@ -18,8 +18,6 @@ import "./App.css";
 
 function App() {
 
-  // MAIN STATES
-
   const [file, setFile] = useState(null);
 
   const [jobDescription, setJobDescription] =
@@ -31,8 +29,6 @@ function App() {
 
   const [showForm, setShowForm] =
     useState(false);
-
-  // ATS FORM STATES
 
   const [name, setName] = useState("");
 
@@ -70,7 +66,6 @@ function App() {
   const [experience, setExperience] =
     useState("");
 
-  // UPLOAD RESUME
 
   const uploadResume = async () => {
 
@@ -95,7 +90,7 @@ function App() {
       );
 
       const response = await fetch(
-        "https://ai-resume-analyzer-production-557e.up.railway.app/upload",
+        "https://ai-resume-analyzer-p3l4.onrender.com/upload",
         {
           method: "POST",
           body: formData,
@@ -133,7 +128,6 @@ function App() {
 
   };
 
-  // DOWNLOAD REPORT
 
   const downloadPDF = () => {
 
@@ -191,11 +185,9 @@ function App() {
 
   };
 
-  // ATS RESUME PDF
+  // GENERATE ATS RESUME PDF
 
   const generateATSResume = () => {
-
-    if (!result) return;
 
     const doc = new jsPDF();
 
@@ -216,18 +208,24 @@ function App() {
     );
 
     doc.text(
-      `LinkedIn: ${linkedin}`,
+      `Phone: ${phone}`,
       20,
       42
     );
 
     doc.text(
-      `GitHub: ${github}`,
+      `LinkedIn: ${linkedin}`,
       20,
       49
     );
 
-    doc.line(20, 55, 190, 55);
+    doc.text(
+      `GitHub: ${github}`,
+      20,
+      56
+    );
+
+    doc.line(20, 63, 190, 63);
 
     // SUMMARY
 
@@ -236,7 +234,7 @@ function App() {
     doc.text(
       "Professional Summary",
       20,
-      70
+      80
     );
 
     doc.setFontSize(12);
@@ -244,7 +242,7 @@ function App() {
     doc.text(
       summary,
       20,
-      80,
+      90,
       { maxWidth: 170 }
     );
 
@@ -255,15 +253,15 @@ function App() {
     doc.text(
       "Technical Skills",
       20,
-      115
+      125
     );
 
     doc.setFontSize(12);
 
     doc.text(
-      result.skills?.join(", "),
+      result?.skills?.join(", ") || "",
       20,
-      125,
+      135,
       { maxWidth: 170 }
     );
 
@@ -274,7 +272,7 @@ function App() {
     doc.text(
       "Education",
       20,
-      155
+      165
     );
 
     doc.setFontSize(12);
@@ -282,38 +280,18 @@ function App() {
     doc.text(
       `${degree} - ${college}`,
       20,
-      165
+      175
     );
 
     doc.text(
       `GPA/CGPA: ${gpa}`,
       20,
-      173
+      183
     );
 
-    // LANGUAGES
-
-    doc.setFontSize(16);
-
-    doc.text(
-      "Languages Known",
-      20,
-      195
-    );
-
-    doc.setFontSize(12);
-
-    doc.text(
-      languages,
-      20,
-      205
-    );
-
-    // NEW PAGE
+    // SECOND PAGE
 
     doc.addPage();
-
-    // PROJECTS
 
     doc.setFontSize(16);
 
@@ -332,12 +310,10 @@ function App() {
       { maxWidth: 170 }
     );
 
-    // CERTIFICATIONS
-
     doc.setFontSize(16);
 
     doc.text(
-      "Certifications",
+      "Languages Known",
       20,
       100
     );
@@ -345,20 +321,34 @@ function App() {
     doc.setFontSize(12);
 
     doc.text(
-      certifications,
+      languages,
       20,
-      110,
-      { maxWidth: 170 }
+      110
     );
 
-    // EXPERIENCE
+    doc.setFontSize(16);
+
+    doc.text(
+      "Certifications",
+      20,
+      140
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      certifications,
+      20,
+      150,
+      { maxWidth: 170 }
+    );
 
     doc.setFontSize(16);
 
     doc.text(
       "Experience",
       20,
-      170
+      210
     );
 
     doc.setFontSize(12);
@@ -366,7 +356,7 @@ function App() {
     doc.text(
       experience,
       20,
-      180,
+      220,
       { maxWidth: 170 }
     );
 
@@ -378,7 +368,7 @@ function App() {
 
   };
 
-  // PIE CHART
+  // CHART DATA
 
   const pieData = [
 
@@ -400,8 +390,6 @@ function App() {
     "#3B82F6",
     "#10B981"
   ];
-
-  // FIXED SKILL GRAPH DATA
 
   const skillData =
     result?.skills?.slice(0, 6).map(
@@ -504,7 +492,7 @@ function App() {
 
         </div>
 
-        {/* MODAL */}
+        {/* ATS MODAL */}
 
         {
 
@@ -524,19 +512,7 @@ function App() {
 
                   <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
 
-                   <input
-  type="text"
-  placeholder="Phone Number"
-  value={phone}
-  onChange={(e) =>
-    setPhone(e.target.value)
-  }
-  className="
-    p-4
-    rounded-xl
-    bg-[#1e293b]
-  "
-/>
+                  <input type="text" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
 
                   <input type="text" placeholder="LinkedIn URL" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
 
@@ -552,7 +528,7 @@ function App() {
 
                   <input type="text" placeholder="Languages Known" value={languages} onChange={(e) => setLanguages(e.target.value)} className="p-4 rounded-xl bg-[#1e293b]" />
 
-                  <textarea placeholder="Projects" value={projects} onChange={(e) => setProjects(e.target.value)} className="p-4 rounded-xl bg-[#1e293b] h-28" />
+                 <textarea placeholder="Projects" value={projects} onChange={(e) => setProjects(e.target.value)} className="p-4 rounded-xl bg-[#1e293b] h-28" />
 
                   <textarea placeholder="Certifications" value={certifications} onChange={(e) => setCertifications(e.target.value)} className="p-4 rounded-xl bg-[#1e293b] h-24" />
 
@@ -562,12 +538,7 @@ function App() {
 
                 <div className="flex gap-4 mt-6">
 
-                  <button
-                    onClick={generateATSResume}
-                    className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-2xl font-semibold"
-                  >
-                    Generate Resume
-                  </button>
+               
 
                   <button
                     onClick={() =>
@@ -583,210 +554,6 @@ function App() {
               </div>
 
             </div>
-
-          )
-
-        }
-
-        {/* CHARTS */}
-
-        {
-
-          result && (
-
-            <>
-
-              <div className="bg-[#0f172a] p-8 rounded-3xl mt-10 text-center">
-
-                <h2 className="text-3xl font-bold mb-2">
-                  ATS Analytics
-                </h2>
-
-                <p className="text-gray-400 mb-6">
-                  Resume compatibility with job description
-                </p>
-
-                <div className="flex justify-center">
-
-                  <PieChart width={350} height={350}>
-
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={90}
-                      outerRadius={120}
-                      dataKey="value"
-                    >
-
-                      {
-
-                        pieData.map(
-                          (entry, index) => (
-
-                            <Cell
-                              key={index}
-                              fill={COLORS[index]}
-                            />
-
-                          )
-                        )
-
-                      }
-
-                    </Pie>
-
-                    <Tooltip />
-
-                    <text
-                      x="50%"
-                      y="50%"
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fill="white"
-                      fontSize="28"
-                      fontWeight="bold"
-                    >
-                      {result.atsScore}%
-                    </text>
-
-                  </PieChart>
-
-                </div>
-
-              </div>
-
-              {/* SKILL GRAPH */}
-
-              <div className="bg-[#0f172a] p-6 rounded-3xl mt-10">
-
-                <h2 className="text-3xl font-bold mb-2">
-                  Skills Analytics
-                </h2>
-
-                <p className="text-gray-400 mb-6">
-                  AI-estimated proficiency level
-                </p>
-
-                <div
-                  style={{
-                    width: "100%",
-                    height: 400
-                  }}
-                >
-
-                  <ResponsiveContainer
-                    width="100%"
-                    height="100%"
-                  >
-
-                    <BarChart
-                      data={skillData}
-                    >
-
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                      />
-
-                      <XAxis
-                        dataKey="skill"
-                      />
-
-                      <YAxis />
-
-                      <Tooltip />
-
-                      <Bar
-                        dataKey="value"
-                        fill="#3B82F6"
-                      />
-
-                    </BarChart>
-
-                  </ResponsiveContainer>
-
-                </div>
-
-              </div>
-
-              {/* RESULT CARDS */}
-
-              <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    ATS Match
-                  </h2>
-
-                  <p className="text-5xl text-blue-400">
-                    {result.atsScore}%
-                  </p>
-
-                  <div className="w-full bg-gray-700 rounded-full h-4 mt-4">
-
-                    <div
-                      className="bg-blue-500 h-4 rounded-full"
-                      style={{
-                        width: `${result.atsScore}%`
-                      }}
-                    ></div>
-
-                  </div>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    Skills
-                  </h2>
-
-                  <p>
-                    {result.skills?.join(", ")}
-                  </p>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    Missing Skills
-                  </h2>
-
-                  <p>
-                    {result.missingSkills?.join(", ")}
-                  </p>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    Suggested Roles
-                  </h2>
-
-                  <p>
-                    {result.suggestedRoles?.join(", ")}
-                  </p>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl md:col-span-2">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    AI Feedback
-                  </h2>
-
-                  <p>
-                    {result.feedback}
-                  </p>
-
-                </div>
-
-              </div>
-
-            </>
 
           )
 
