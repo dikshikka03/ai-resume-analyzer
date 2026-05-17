@@ -1,3 +1,5 @@
+// COMPLETE FINAL APP.JSX
+
 import {
   PieChart,
   Pie,
@@ -12,31 +14,64 @@ import {
 } from "recharts";
 
 import jsPDF from "jspdf";
+
 import { useState } from "react";
+
 import "./App.css";
 
 function App() {
 
-  const [file, setFile] = useState(null);
+  const [file, setFile] =
+    useState(null);
 
   const [jobDescription, setJobDescription] =
     useState("");
 
-  const [result, setResult] = useState(null);
+  const [result, setResult] =
+    useState(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
   const [showForm, setShowForm] =
-  useState(false);
+    useState(false);
 
-const [name, setName] =
-  useState("");
+  // ATS FORM STATES
 
-const [email, setEmail] =
-  useState("");
+  const [name, setName] =
+    useState("");
 
-const [phone, setPhone] =
-  useState("");
+  const [email, setEmail] =
+    useState("");
+
+  const [phone, setPhone] =
+    useState("");
+
+  const [linkedin, setLinkedin] =
+    useState("");
+
+  const [github, setGithub] =
+    useState("");
+
+  const [projects, setProjects] =
+    useState("");
+
+  const [experience, setExperience] =
+    useState("");
+
+  const [languages, setLanguages] =
+    useState("");
+
+  const [education, setEducation] =
+    useState("");
+
+  const [certifications, setCertifications] =
+    useState("");
+
+  const [skillsInput, setSkillsInput] =
+    useState("");
+
+  // UPLOAD RESUME
 
   const uploadResume = async () => {
 
@@ -44,37 +79,36 @@ const [phone, setPhone] =
 
       if (!file) {
 
-        alert("Please select a resume");
+        alert(
+          "Please select resume"
+        );
 
         return;
       }
 
       setLoading(true);
 
-      const formData = new FormData();
+      const formData =
+        new FormData();
 
-      formData.append("resume", file);
+      formData.append(
+        "resume",
+        file
+      );
 
       formData.append(
         "jobDescription",
         jobDescription
       );
 
-      const response = await fetch(
-        "https://ai-resume-analyzer-p3l4.onrender.com/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-
-        throw new Error(
-          "Upload failed"
+      const response =
+        await fetch(
+          "https://ai-resume-analyzer-p3l4.onrender.com/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
         );
-
-      }
 
       const data =
         await response.json();
@@ -99,15 +133,16 @@ const [phone, setPhone] =
 
   };
 
+  // DOWNLOAD REPORT PDF
+
   const downloadPDF = () => {
 
-    if (!result) {
-      return;
-    }
+    if (!result) return;
 
-    const doc = new jsPDF();
+    const doc =
+      new jsPDF();
 
-    doc.setFontSize(18);
+    doc.setFontSize(24);
 
     doc.text(
       "AI Resume Analysis Report",
@@ -115,46 +150,39 @@ const [phone, setPhone] =
       20
     );
 
-    doc.setFontSize(12);
+    doc.setFontSize(14);
 
     doc.text(
-      `ATS Score: ${result.atsScore}%`,
+      `ATS Score: ${atsScore}%`,
       20,
-      40
+      45
     );
 
     doc.text(
-      `Resume Score: ${result.resumeScore}`,
+      `Matched Skills: ${matchedSkills.join(", ")}`,
       20,
-      55
+      65,
+      {
+        maxWidth: 170
+      }
     );
 
     doc.text(
-      `Skills: ${result.skills.join(", ")}`,
+      `Missing Skills: ${missingSkills.join(", ")}`,
       20,
-      75,
-      { maxWidth: 170 }
+      95,
+      {
+        maxWidth: 170
+      }
     );
 
     doc.text(
-      `Missing Skills: ${result.missingSkills.join(", ")}`,
+      `Feedback: ${atsMessage}`,
       20,
-      105,
-      { maxWidth: 170 }
-    );
-
-    doc.text(
-      `Suggested Roles: ${result.suggestedRoles.join(", ")}`,
-      20,
-      135,
-      { maxWidth: 170 }
-    );
-
-    doc.text(
-      `Feedback: ${result.feedback.join(", ")}`,
-      20,
-      165,
-      { maxWidth: 170 }
+      125,
+      {
+        maxWidth: 170
+      }
     );
 
     doc.save(
@@ -163,51 +191,327 @@ const [phone, setPhone] =
 
   };
 
+  // GENERATE ATS RESUME
+
+  const generateATSResume = () => {
+
+    const doc =
+      new jsPDF();
+
+    doc.setFontSize(28);
+
+    doc.text(
+      name,
+      20,
+      20
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      email,
+      20,
+      34
+    );
+
+    doc.text(
+      phone,
+      20,
+      42
+    );
+
+    doc.text(
+      linkedin,
+      20,
+      50
+    );
+
+    doc.text(
+      github,
+      20,
+      58
+    );
+
+    doc.line(
+      20,
+      66,
+      190,
+      66
+    );
+
+    // EDUCATION
+
+    doc.setFontSize(18);
+
+    doc.text(
+      "Education",
+      20,
+      82
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      education,
+      20,
+      94,
+      {
+        maxWidth: 170
+      }
+    );
+
+    // SKILLS
+
+    doc.setFontSize(18);
+
+    doc.text(
+      "Skills",
+      20,
+      125
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      skillsInput,
+      20,
+      137,
+      {
+        maxWidth: 170
+      }
+    );
+
+    // PROJECTS
+
+    doc.setFontSize(18);
+
+    doc.text(
+      "Projects",
+      20,
+      167
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      projects,
+      20,
+      179,
+      {
+        maxWidth: 170
+      }
+    );
+
+    doc.addPage();
+
+    // EXPERIENCE
+
+    doc.setFontSize(18);
+
+    doc.text(
+      "Experience",
+      20,
+      20
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      experience,
+      20,
+      32,
+      {
+        maxWidth: 170
+      }
+    );
+
+    // LANGUAGES
+
+    doc.setFontSize(18);
+
+    doc.text(
+      "Languages Known",
+      20,
+      120
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      languages,
+      20,
+      132
+    );
+
+    // CERTIFICATIONS
+
+    doc.setFontSize(18);
+
+    doc.text(
+      "Certifications",
+      20,
+      165
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+      certifications,
+      20,
+      177,
+      {
+        maxWidth: 170
+      }
+    );
+
+    doc.save(
+      "ATS-Resume.pdf"
+    );
+
+    setShowForm(false);
+
+  };
+
+  // TRENDING TECH SKILLS
+
+  const trendingSkills = [
+
+    "react",
+    "node.js",
+    "next.js",
+    "typescript",
+    "mongodb",
+    "express",
+    "python",
+    "java",
+    "c++",
+    "sql",
+    "machine learning",
+    "ai",
+    "aws",
+    "docker",
+    "kubernetes",
+    "git",
+    "javascript"
+
+  ];
+
+  // USER SKILLS
+
+  const userSkills =
+
+    result?.skills?.map(
+      (skill) =>
+        skill.toLowerCase()
+    ) || [];
+
+  // MATCHED SKILLS
+
+  const matchedSkills =
+
+    trendingSkills.filter(
+      (skill) =>
+
+        userSkills.some(
+          (userSkill) =>
+
+            userSkill.includes(skill)
+        )
+    );
+
+  // MISSING SKILLS
+
+  const missingSkills =
+
+    trendingSkills.filter(
+      (skill) =>
+
+        !matchedSkills.includes(skill)
+    );
+
+  // REALISTIC ATS SCORE
+
+  const atsScore =
+
+    Math.min(
+
+      Math.round(
+        (
+          matchedSkills.length /
+          trendingSkills.length
+        ) * 100
+      ),
+
+      95
+
+    );
+
+  // PIE DATA
+
   const pieData = [
 
     {
       name: "Matched",
-      value: result?.atsScore || 0
+      value: atsScore
     },
 
     {
-      name: "Remaining",
+      name: "Missing",
       value:
-        100 -
-        (result?.atsScore || 0)
+        100 - atsScore
     }
 
   ];
 
-  const COLORS = [
-    "#3B82F6",
-    "#10B981"
-  ];
+  // SKILL ANALYTICS
 
-const skillData =
+  const topSkills =
 
-  result?.skills
-    ?.slice(0, 6)
-    .map((skill) => ({
+    matchedSkills.slice(0, 6);
 
-      skill,
+  const skillData =
 
-      value:
-        Math.floor(
-          Math.random() * 20
-        ) + 80
+    topSkills.map(
+      (skill) => ({
 
-    })) || [];
+        skill,
+
+        value:
+
+          Math.floor(
+            Math.random() * 20
+          ) + 75
+
+      })
+    );
+
+  // ATS MESSAGE
+
+  const atsMessage =
+
+    atsScore >= 80
+
+      ? "Excellent ATS compatibility"
+
+      : atsScore >= 60
+
+      ? "Good profile but needs improvement"
+
+      : atsScore >= 40
+
+      ? "Average ATS match"
+
+      : "Low ATS match. Add more relevant skills";
 
   return (
 
-    <div className="min-h-screen bg-[#020617] text-white p-8">
+    <div className="min-h-screen bg-[#020617] text-white p-6">
 
-      <h1 className="text-5xl font-bold text-center mb-10">
+      <h1 className="text-6xl font-bold text-center mb-10">
         AI Resume Analyzer
       </h1>
 
-      <div className="max-w-5xl mx-auto bg-[#0f172a] p-10 rounded-3xl shadow-lg">
+      <div className="max-w-7xl mx-auto bg-[#0f172a] p-8 rounded-3xl">
 
         <input
           type="file"
@@ -228,95 +532,51 @@ const skillData =
               e.target.value
             )
           }
-          className="
-            w-full
-            h-64
-            p-4
-            rounded-2xl
-            bg-[#1e293b]
-            text-white
-            border
-            border-gray-600
-            outline-none
-            mb-6
-          "
+          className="w-full h-60 p-5 rounded-2xl bg-[#1e293b] mb-6"
         />
 
-        <div className="flex flex-col gap-6 mt-10">
+        {/* BUTTONS */}
 
-          <div className="flex flex-wrap gap-5 mt-10">
+        <div className="flex flex-wrap items-center gap-4 mb-10">
 
-            <button
-              onClick={uploadResume}
-              className="
-                bg-blue-600
-                hover:bg-blue-700
-                px-5
-                py-3
-                rounded-2xl
-                text-base
-                font-semibold
-                transition-all duration-300
-              "
-            >
-
-              {
-                loading
-                  ? "Uploading..."
-                  : "Upload Resume"
-              }
-
-            </button>
-
+          <button
+            onClick={uploadResume}
+            className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-2xl font-semibold"
+          >
             {
-
-              result && (
-
-                <button
-                  onClick={downloadPDF}
-                  className="
-                    bg-green-600
-                    hover:bg-green-700
-                    px-5
-                    py-3
-                    rounded-2xl
-                    text-base
-                    font-semibold
-                    transition-all duration-300
-                  "
-                >
-                  Download Report PDF
-                </button>
-
-              )
-
+              loading
+                ? "Uploading..."
+                : "Upload Resume"
             }
-
-          </div>
+          </button>
 
           {
 
             result && (
 
-              <div className="mt-6">
+              <button
+                onClick={downloadPDF}
+                className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-2xl font-semibold"
+              >
+                Download Report PDF
+              </button>
 
-          <button
-  onClick={() =>
-    setShowForm(true)
-  }
-  className="
-    bg-purple-600
-    hover:bg-purple-700
-    px-5
-    py-3
-    rounded-2xl
-    text-base
-    font-semibold
-  "
->
-  Generate ATS Resume
-</button>
-              </div>
+            )
+
+          }
+
+          {
+
+            result && (
+
+              <button
+                onClick={() =>
+                  setShowForm(true)
+                }
+                className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-2xl font-semibold"
+              >
+                Generate ATS Resume
+              </button>
 
             )
 
@@ -328,364 +588,352 @@ const skillData =
 
           result && (
 
-            <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-              <div className="bg-[#0f172a] p-8 rounded-3xl mt-10 text-center">
+              {/* LEFT */}
 
-                <h2 className="text-3xl font-bold mb-2">
-                  ATS Analytics
-                </h2>
+              <div className="space-y-6">
 
-                <p className="text-gray-400 mb-6">
-                  Resume compatibility with job description
-                </p>
+                <div className="bg-[#1e293b] p-6 rounded-3xl">
 
-                <div className="flex justify-center">
-
-                  <PieChart
-                    width={350}
-                    height={350}
-                  >
-
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={90}
-                      outerRadius={120}
-                      dataKey="value"
-                    >
-
-                      {
-
-                        pieData.map(
-                          (entry, index) => (
-
-                            <Cell
-                              key={index}
-                              fill={COLORS[index]}
-                            />
-
-                          )
-                        )
-
-                      }
-
-                    </Pie>
-
-                    <Tooltip />
-
-                    <text
-                      x="50%"
-                      y="50%"
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fill="white"
-                      fontSize="28"
-                      fontWeight="bold"
-                    >
-                      {result.atsScore}%
-                    </text>
-
-                  </PieChart>
-
-                </div>
-
-                <div className="mt-4 text-lg text-gray-300">
-
-                  {
-                    result.atsScore >= 75
-                    ? "Excellent ATS Match"
-                    : result.atsScore >= 50
-                    ? "Good ATS Match"
-                    : "Needs Improvement"
-                  }
-
-                </div>
-
-              </div>
-
-              <div className="bg-[#0f172a] p-6 rounded-3xl mt-10">
-
-                <h2 className="text-3xl font-bold mb-6">
-                  Skills Analytics
-                </h2>
-
-                <p className="text-gray-400 mb-6">
-  AI-estimated proficiency level for detected skills
-</p>
-
-                <div
-                  style={{
-                    width: "100%",
-                    height: 400
-                  }}
-                >
-
-                  <ResponsiveContainer
-                    width="100%"
-                    height="100%"
-                  >
-
-                    <BarChart
-                      data={skillData}
-                    >
-
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                      />
-
-                      <XAxis
-                        dataKey="skill"
-                      />
-
-                      <YAxis />
-
-                      <Tooltip />
-
-                      <Bar
-                        dataKey="value"
-                        fill="#3B82F6"
-                      />
-
-                    </BarChart>
-
-                  </ResponsiveContainer>
-
-                </div>
-
-              </div>
-
-              <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
+                  <h2 className="text-4xl font-bold mb-4">
                     ATS Match
                   </h2>
 
-                  <p className="text-5xl text-blue-400">
-                    {result.atsScore}%
+                  <p className="text-6xl text-blue-400 font-bold">
+                    {atsScore}%
                   </p>
 
-                  <div className="w-full bg-gray-700 rounded-full h-4 mt-4">
+                  <p className="mt-4 text-gray-300">
+                    {atsMessage}
+                  </p>
 
-                    <div
-                      className="
-                        bg-blue-500
-                        h-4
-                        rounded-full
-                        transition-all
-                        duration-500
-                      "
-                      style={{
-                        width: `${result.atsScore}%`
-                      }}
-                    ></div>
+                </div>
+
+                <div className="bg-[#1e293b] p-6 rounded-3xl">
+
+                  <h2 className="text-4xl font-bold mb-4">
+                    Skills
+                  </h2>
+
+                  <p className="text-lg leading-9">
+                    {
+                      matchedSkills.join(", ")
+                    }
+                  </p>
+
+                </div>
+
+                <div className="bg-[#1e293b] p-6 rounded-3xl">
+
+                  <h2 className="text-4xl font-bold mb-4">
+                    Missing Skills
+                  </h2>
+
+                  <p className="text-lg leading-9">
+
+                    {
+
+                      missingSkills.length > 0
+
+                        ? missingSkills
+                            .slice(0, 8)
+                            .join(", ")
+
+                        : "No major missing skills"
+
+                    }
+
+                  </p>
+
+                </div>
+
+              </div>
+
+              {/* RIGHT */}
+
+              <div className="space-y-6">
+
+                {/* ATS ANALYTICS */}
+
+                <div className="bg-[#1e293b] p-6 rounded-3xl">
+
+                  <h2 className="text-4xl font-bold text-center mb-4">
+                    ATS Analytics
+                  </h2>
+
+                  <div className="flex justify-center">
+
+                    <PieChart
+                      width={320}
+                      height={320}
+                    >
+
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={80}
+                        outerRadius={120}
+                        dataKey="value"
+                      >
+
+                        {
+
+                          pieData.map(
+                            (
+                              entry,
+                              index
+                            ) => (
+
+                              <Cell
+                                key={index}
+                                fill={
+                                  index === 0
+                                    ? "#3B82F6"
+                                    : "#EF4444"
+                                }
+                              />
+
+                            )
+                          )
+
+                        }
+
+                      </Pie>
+
+                      <Tooltip />
+
+                    </PieChart>
+
+                  </div>
+
+                  <div className="text-center mt-4">
+
+                    <p className="text-3xl font-bold text-blue-400">
+                      {atsScore}% Match
+                    </p>
+
+                    <p className="text-gray-400 mt-2">
+                      {
+                        matchedSkills.length
+                      } skills matched
+                    </p>
 
                   </div>
 
                 </div>
 
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
+                {/* SKILL ANALYTICS */}
 
-                  <h2 className="text-3xl font-bold mb-4">
-                    Skills
+                <div className="bg-[#1e293b] p-6 rounded-3xl">
+
+                  <h2 className="text-4xl font-bold mb-6">
+                    Skills Analytics
                   </h2>
 
-                  <p>
-                    {
-                      Array.isArray(
-                        result.skills
-                      )
-                        ? result.skills.join(", ")
-                        : result.skills
-                    }
-                  </p>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: 380
+                    }}
+                  >
 
-                </div>
+                    <ResponsiveContainer
+                      width="100%"
+                      height="100%"
+                    >
 
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
+                      <BarChart
+                        data={skillData}
+                      >
 
-                  <h2 className="text-3xl font-bold mb-4">
-                    Missing Skills
-                  </h2>
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                        />
 
-                  <p>
+                        <XAxis
+                          dataKey="skill"
+                        />
 
-  {
+                        <YAxis />
 
-    result?.missingSkills?.length > 0
+                        <Tooltip />
 
-      ? result.missingSkills.join(", ")
+                        <Bar
+                          dataKey="value"
+                          fill="#3B82F6"
+                        />
 
-      : "No major missing skills"
+                      </BarChart>
 
-  }
+                    </ResponsiveContainer>
 
-</p>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    Suggested Roles
-                  </h2>
-
-                  <p>
-                    {
-                      Array.isArray(
-                        result.suggestedRoles
-                      )
-                        ? result.suggestedRoles.join(", ")
-                        : result.suggestedRoles
-                    }
-                  </p>
-
-                </div>
-
-                <div className="bg-[#0f172a] p-6 rounded-3xl md:col-span-2">
-
-                  <h2 className="text-3xl font-bold mb-4">
-                    AI Feedback
-                  </h2>
-
-                  <p>
-                    {
-                      Array.isArray(
-                        result.feedback
-                      )
-                        ? result.feedback.join(", ")
-                        : result.feedback
-                    }
-                  </p>
+                  </div>
 
                 </div>
 
               </div>
 
-            </>
+            </div>
 
           )
 
         }
-{
-
-  showForm && (
-
-    <div className="
-      fixed
-      inset-0
-      bg-black/70
-      flex
-      items-center
-      justify-center
-      z-50
-      p-4
-      overflow-y-auto
-    ">
-
-      <div className="
-        bg-[#0f172a]
-        p-8
-        rounded-3xl
-        w-full
-        max-w-3xl
-      ">
-
-        <h2 className="
-          text-3xl
-          font-bold
-          mb-6
-        ">
-          ATS Resume Details
-        </h2>
-
-        <div className="
-          grid
-          grid-cols-1
-          gap-4
-        ">
-
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) =>
-              setName(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#1e293b]"
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#1e293b]"
-          />
-
-          <input
-            type="text"
-            placeholder="Phone Number"
-            value={phone}
-            onChange={(e) =>
-              setPhone(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#1e293b]"
-          />
-
-        </div>
-
-        <div className="
-          flex
-          gap-4
-          mt-6
-        ">
-
-          <button
-            onClick={generateATSResume}
-            className="
-              bg-purple-600
-              hover:bg-purple-700
-              px-6
-              py-3
-              rounded-2xl
-              font-semibold
-            "
-          >
-            Generate Resume
-          </button>
-
-          <button
-            onClick={() =>
-              setShowForm(false)
-            }
-            className="
-              bg-gray-600
-              hover:bg-gray-700
-              px-6
-              py-3
-              rounded-2xl
-              font-semibold
-            "
-          >
-            Cancel
-          </button>
-
-        </div>
 
       </div>
 
-    </div>
+      {/* ATS MODAL */}
 
-  )
+      {
 
-}
-      </div>
+        showForm && (
+
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 overflow-y-auto p-4">
+
+            <div className="bg-[#0f172a] p-8 rounded-3xl w-full max-w-3xl">
+
+              <h2 className="text-4xl font-bold mb-6">
+                ATS Resume Details
+              </h2>
+
+              <div className="grid grid-cols-1 gap-4 max-h-[70vh] overflow-y-auto pr-2">
+
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) =>
+                    setName(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b]"
+                />
+
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) =>
+                    setEmail(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b]"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  value={phone}
+                  onChange={(e) =>
+                    setPhone(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b]"
+                />
+
+                <input
+                  type="text"
+                  placeholder="LinkedIn URL"
+                  value={linkedin}
+                  onChange={(e) =>
+                    setLinkedin(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b]"
+                />
+
+                <input
+                  type="text"
+                  placeholder="GitHub URL"
+                  value={github}
+                  onChange={(e) =>
+                    setGithub(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b]"
+                />
+
+                <textarea
+                  placeholder="Projects"
+                  value={projects}
+                  onChange={(e) =>
+                    setProjects(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b] h-24"
+                />
+
+                <textarea
+                  placeholder="Experience"
+                  value={experience}
+                  onChange={(e) =>
+                    setExperience(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b] h-24"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Languages Known"
+                  value={languages}
+                  onChange={(e) =>
+                    setLanguages(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b]"
+                />
+
+                <textarea
+                  placeholder="Education"
+                  value={education}
+                  onChange={(e) =>
+                    setEducation(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b] h-20"
+                />
+
+                <textarea
+                  placeholder="Certifications"
+                  value={certifications}
+                  onChange={(e) =>
+                    setCertifications(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b] h-20"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Skills"
+                  value={skillsInput}
+                  onChange={(e) =>
+                    setSkillsInput(e.target.value)
+                  }
+                  className="p-4 rounded-xl bg-[#1e293b]"
+                />
+
+              </div>
+
+              <div className="flex gap-4 mt-6">
+
+                <button
+                  onClick={generateATSResume}
+                  className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-2xl font-semibold"
+                >
+                  Generate Resume
+                </button>
+
+                <button
+                  onClick={() =>
+                    setShowForm(false)
+                  }
+                  className="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-2xl font-semibold"
+                >
+                  Cancel
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        )
+
+      }
 
     </div>
 
