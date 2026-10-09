@@ -400,6 +400,6 @@ Specialization: Artificial Intelligence and Machine Learning
 - **GitHub:** https://github.com/dikshikka03
 - **Project Repository:** https://github.com/dikshikka03/ai-resume-analyzer
 - **Live Application:** https://ai-resume-analyzer-one-amber.vercel.app/
-- **Email:** YOUR_EMAIL_ADDRESS_HERE
+- **Email:** dikshikaa10@gmail.com
 
 Feel free to connect for discussions about AI, full-stack development, and software engineering projects.
